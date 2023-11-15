@@ -1,13 +1,8 @@
-import { HttpNotFoundError } from "@/api/errors"
+import throwIfNotFound from "@/api/helpers/throwIfNotFound"
 import mw from "@/api/middlewares/mw"
 import readDatabase from "@/db/readDatabase"
 import writeDatabase from "@/db/writeDatabase"
 
-const throwIfNotFound = (resource) => {
-  if (!resource) {
-    throw new HttpNotFoundError()
-  }
-}
 const handle = mw({
   GET: [
     async (req, res) => {

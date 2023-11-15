@@ -12,3 +12,15 @@ export class HttpNotFoundError extends HttpPublicError {
     super(message)
   }
 }
+
+export class HttpDuplicateError extends HttpPublicError {
+  statusCode = HTTP_ERRORS.DUPLICATE
+
+  constructor(resource, key, value) {
+    super(
+      !resource
+        ? "Resource already exists"
+        : `Duplicated resource ${resource} on \`${key}\`=\`${value}\``,
+    )
+  }
+}
