@@ -1,7 +1,9 @@
 import throwIfNotFound from "@/api/helpers/throwIfNotFound"
 import mw from "@/api/middlewares/mw"
+import validate from "@/api/middlewares/validate"
 import readDatabase from "@/db/readDatabase"
 import writeDatabase from "@/db/writeDatabase"
+import { descriptionValidator, nameValidator } from "@/utils/validators"
 
 const handle = mw({
   GET: [
@@ -16,6 +18,10 @@ const handle = mw({
     },
   ],
   PATCH: [
+    validate({
+      name: nameValidator,
+      description: descriptionValidator,
+    }),
     async (req, res) => {
       const { productId } = req.query
       const input = req.body

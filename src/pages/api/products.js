@@ -1,10 +1,16 @@
 import throwIfDuplicate from "@/api/helpers/throwIfDuplicate"
 import mw from "@/api/middlewares/mw"
+import validate from "@/api/middlewares/validate"
 import readDatabase from "@/db/readDatabase"
 import writeDatabase from "@/db/writeDatabase"
+import { descriptionValidator, nameValidator } from "@/utils/validators"
 
 const handle = mw({
   POST: [
+    validate({
+      name: nameValidator,
+      description: descriptionValidator,
+    }),
     async (req, res) => {
       const input = req.body
       const db = await readDatabase()
