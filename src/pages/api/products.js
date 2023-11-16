@@ -28,7 +28,7 @@ const handle = mw({
     async (req, res) => {
       const db = await readDatabase()
 
-      res.send(db)
+      setTimeout(() => res.send(Object.values(db)), 3000)
     },
   ],
 })
