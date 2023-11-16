@@ -12,6 +12,7 @@ export const seed = async (db) => {
   await db("products").insert(
     [...new Array(1000)].map(() => ({
       name: faker.commerce.productName(),
+      description: faker.commerce.productDescription(),
       categoryId:
         categories[faker.number.int({ min: 0, max: categories.length - 1 })].id,
     })),

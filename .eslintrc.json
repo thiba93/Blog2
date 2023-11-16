@@ -125,7 +125,7 @@
     "no-underscore-dangle": ["error", { "allowFunctionParams": false }],
     "no-unneeded-ternary": ["error", { "defaultAssignment": false }],
     "no-unused-expressions": ["error", { "enforceForJSX": true }],
-    "no-unused-vars": ["error", { "varsIgnorePattern": "_" }],
+    "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
     "no-useless-call": "error",
     "no-useless-computed-key": ["error", { "enforceForClassMembers": true }],
     "no-useless-concat": "error",
