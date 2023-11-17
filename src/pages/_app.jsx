@@ -17,7 +17,7 @@ export default function App({ Component: Page, pageProps }) {
                   <Link href="/">Home</Link>
                 </li>
                 <li>
-                  <Link href="/create">Create product</Link>
+                  <Link href="/products/create">Create product</Link>
                 </li>
               </ul>
             </nav>

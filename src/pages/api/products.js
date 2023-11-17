@@ -9,18 +9,22 @@ import {
 const handle = mw({
   POST: [
     validate({
-      name: nameValidator.required(),
-      description: descriptionValidator.required(),
-      categoryId: idValidator.required(),
+      body: {
+        name: nameValidator.required(),
+        description: descriptionValidator.required(),
+        categoryId: idValidator.required(),
+      },
     }),
-    async ({ req, res, db }) => {
-      const input = req.body
-      const [newProduct] = await db("products").insert(input).returning("*")
+    async ({ res, db, input: { body } }) => {
+      const [newProduct] = await db("products").insert(body).returning("*")
 
       res.send(newProduct)
     },
   ],
   GET: [
+    validate({
+      page: pageValidator,
+    }),
     async ({ res, db }) => {
       const products = await db("products")
 

@@ -1,18 +1,31 @@
 import { HttpArgumentsError } from "@/api/errors"
+import { merge } from "@corex/deepmerge"
 import { ValidationError, object } from "yup"
 
 const validate =
-  (validationSchema) =>
-  async ({ req, next }) => {
-    try {
-      const sanitizedBody = await object(validationSchema)
-        .noUnknown()
-        .validate(req.body, {
-          abortEarly: false,
-        })
+  ({ query: queryValidator, body: bodyValidator }) =>
+  // eslint-disable-next-line complexity
+  async (ctx) => {
+    const { req, next } = ctx
 
-      // eslint-disable-next-line require-atomic-updates
-      req.body = sanitizedBody
+    try {
+      const sanitizedInput = await object(
+        merge([
+          queryValidator ? { query: object(queryValidator) } : {},
+          bodyValidator ? { body: object(bodyValidator) } : {},
+        ]),
+      )
+        .noUnknown()
+        .validate(
+          merge([
+            queryValidator ? { query: req.query || {} } : {},
+            bodyValidator ? { body: req.body || {} } : {},
+          ]),
+          {
+            abortEarly: false,
+          },
+        )
+      ctx.input = sanitizedInput
 
       await next()
     } catch (err) {

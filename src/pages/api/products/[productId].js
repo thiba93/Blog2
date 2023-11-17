@@ -1,13 +1,27 @@
 import throwIfNotFound from "@/api/helpers/throwIfNotFound"
 import mw from "@/api/middlewares/mw"
 import validate from "@/api/middlewares/validate"
-import { descriptionValidator, nameValidator } from "@/utils/validators"
+import {
+  descriptionValidator,
+  idValidator,
+  nameValidator,
+} from "@/utils/validators"
 
 const handle = mw({
   GET: [
-    async ({ req, res }) => {
-      const { productId } = req.query
-      const product = db[productId]
+    validate({
+      query: {
+        productId: idValidator.required(),
+      },
+    }),
+    async ({
+      res,
+      db,
+      input: {
+        query: { productId },
+      },
+    }) => {
+      const [product] = await db("products").where({ id: productId })
 
       throwIfNotFound(product)
 
@@ -16,26 +30,52 @@ const handle = mw({
   ],
   PATCH: [
     validate({
-      name: nameValidator,
-      description: descriptionValidator,
+      query: {
+        productId: idValidator.required(),
+      },
+      body: {
+        name: nameValidator,
+        description: descriptionValidator,
+      },
     }),
-    async ({ req, res }) => {
-      const { productId } = req.query
-      const input = req.body
+    async ({
+      db,
+      res,
+      input: {
+        query: { productId },
+        body,
+      },
+    }) => {
+      const product = await db("products").where({ id: productId })
 
       throwIfNotFound(product)
 
-      const updatedProduct = { ...product, ...input }
+      const [updatedProduct] = await db("products")
+        .update(body)
+        .where({ id: productId })
+        .returning("*")
 
       res.send(updatedProduct)
     },
   ],
   DELETE: [
-    async ({ req, res }) => {
-      const { productId } = req.query
-      const db = await ()
-      const { [productId]: product, ...otherProducts } = db
+    validate({
+      query: {
+        productId: idValidator.required(),
+      },
+    }),
+    async ({
+      res,
+      db,
+      input: {
+        query: { productId },
+      },
+    }) => {
+      const product = await db("products").where({ id: productId })
+
       throwIfNotFound(product)
+
+      await db("products").delete().where({ id: productId })
 
       res.send(product)
     },
