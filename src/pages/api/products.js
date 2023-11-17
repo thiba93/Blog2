@@ -4,7 +4,9 @@ import {
   descriptionValidator,
   idValidator,
   nameValidator,
+  pageValidator,
 } from "@/utils/validators"
+import webConfig from "@/web/config"
 
 const handle = mw({
   POST: [
@@ -23,12 +25,30 @@ const handle = mw({
   ],
   GET: [
     validate({
-      page: pageValidator,
+      query: {
+        page: pageValidator.required(),
+      },
     }),
-    async ({ res, db }) => {
-      const products = await db("products")
+    async ({
+      res,
+      db,
+      input: {
+        query: { page },
+      },
+    }) => {
+      const query = db("products")
+      const products = await query
+        .clone()
+        .limit(webConfig.pagination.limit)
+        .offset((page - 1) * webConfig.pagination.limit)
+      const [{ count }] = await query.clone().count()
 
-      res.send(products)
+      res.send({
+        result: products,
+        meta: {
+          count,
+        },
+      })
     },
   ],
 })

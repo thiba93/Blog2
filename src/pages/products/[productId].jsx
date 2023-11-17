@@ -1,9 +1,11 @@
 import { useQuery } from "@tanstack/react-query"
 import axios from "axios"
-import { useParams } from "next/navigation"
+import { useRouter } from "next/router"
 
 const ProductPage = () => {
-  const { productId } = useParams() || {}
+  const {
+    query: { productId },
+  } = useRouter()
   const {
     isLoading,
     data: { data: product },

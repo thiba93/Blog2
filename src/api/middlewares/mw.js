@@ -1,5 +1,5 @@
+import config from "@/api/config"
 import { HttpPublicError, PublicError } from "@/api/errors"
-import config from "@/config"
 import { HTTP_ERRORS } from "@/pages/api/constants"
 import knex from "knex"
 
@@ -46,6 +46,8 @@ const mw = (methodHandlers) => async (req, res) => {
     }
 
     res.send({ error: err.message })
+  } finally {
+    await db.destroy()
   }
 }
 

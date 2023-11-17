@@ -9,10 +9,16 @@ const sizes = {
   md: "px-3 py-2 text-xl font-semibold",
 }
 const Button = (props) => {
-  const { variant = "primary", size = "md", className, ...otherProps } = props
+  const {
+    as: Component = "button",
+    variant = "primary",
+    size = "md",
+    className,
+    ...otherProps
+  } = props
 
   return (
-    <button
+    <Component
       className={clsx(variants[variant], sizes[size], className)}
       {...otherProps}
     />
