@@ -3,7 +3,6 @@ import CategoryModel from "@/db/models/CategoryModel"
 
 class ProductModel extends BaseModel {
   static tableName = "products"
-
   static relationMappings = {
     category: {
       modelClass: CategoryModel,

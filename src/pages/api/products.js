@@ -1,6 +1,5 @@
 import mw from "@/api/middlewares/mw"
 import validate from "@/api/middlewares/validate"
-import ProductModel from "@/db/models/ProductModel"
 import {
   descriptionValidator,
   idValidator,
@@ -18,8 +17,8 @@ const handle = mw({
         categoryId: idValidator.required(),
       },
     }),
-    async ({ res, db, input: { body } }) => {
-      const [newProduct] = await db("products").insert(body).returning("*")
+    async ({ res, input: { body }, models: { ProductModel } }) => {
+      const newProduct = await ProductModel.query().insertAndFetch(body)
 
       res.send(newProduct)
     },
@@ -35,6 +34,7 @@ const handle = mw({
       input: {
         query: { page },
       },
+      models: { ProductModel },
     }) => {
       const query = ProductModel.query()
       const products = await query

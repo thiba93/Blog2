@@ -1,4 +1,3 @@
-import throwIfNotFound from "@/api/helpers/throwIfNotFound"
 import mw from "@/api/middlewares/mw"
 import validate from "@/api/middlewares/validate"
 import {
@@ -16,14 +15,15 @@ const handle = mw({
     }),
     async ({
       res,
-      db,
       input: {
         query: { productId },
       },
+      models: { ProductModel },
     }) => {
-      const [product] = await db("products").where({ id: productId })
-
-      throwIfNotFound(product)
+      const product = await ProductModel.query()
+        .findById(productId)
+        .withGraphFetched("category")
+        .throwIfNotFound()
 
       res.send(product)
     },
@@ -39,21 +39,17 @@ const handle = mw({
       },
     }),
     async ({
-      db,
       res,
       input: {
         query: { productId },
         body,
       },
+      models: { ProductModel },
     }) => {
-      const product = await db("products").where({ id: productId })
-
-      throwIfNotFound(product)
-
-      const [updatedProduct] = await db("products")
-        .update(body)
-        .where({ id: productId })
-        .returning("*")
+      const updatedProduct = await ProductModel.query()
+        .updateAndFetchById(productId, body)
+        .withGraphFetched("category")
+        .throwIfNotFound()
 
       res.send(updatedProduct)
     },
@@ -66,16 +62,16 @@ const handle = mw({
     }),
     async ({
       res,
-      db,
       input: {
         query: { productId },
       },
+      models: { ProductModel },
     }) => {
-      const product = await db("products").where({ id: productId })
+      const product = await ProductModel.query()
+        .findById(productId)
+        .throwIfNotFound()
 
-      throwIfNotFound(product)
-
-      await db("products").delete().where({ id: productId })
+      await product.$query().delete()
 
       res.send(product)
     },

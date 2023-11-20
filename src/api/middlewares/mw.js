@@ -1,8 +1,10 @@
 import config from "@/api/config"
-import { HttpPublicError, PublicError } from "@/api/errors"
+import { HttpNotFoundError, HttpPublicError, PublicError } from "@/api/errors"
 import BaseModel from "@/db/models/BaseModel"
+import ProductModel from "@/db/models/ProductModel"
 import { HTTP_ERRORS } from "@/pages/api/constants"
 import knex from "knex"
+import { NotFoundError } from "objection"
 
 const mw = (methodHandlers) => async (req, res) => {
   const handlers = methodHandlers[req.method.toUpperCase()]
@@ -14,6 +16,10 @@ const mw = (methodHandlers) => async (req, res) => {
   }
 
   const db = knex(config.db)
+
+  if (config.isDevMode) {
+    db.on("query", ({ sql, bindings }) => console.info({ sql, bindings }))
+  }
 
   BaseModel.knex(db)
 
@@ -29,27 +35,38 @@ const mw = (methodHandlers) => async (req, res) => {
     res,
     next,
     db,
+    models: {
+      ProductModel,
+    },
   }
 
   try {
     await next()
   } catch (err) {
-    if (!(err instanceof PublicError)) {
+    const error = (() => {
+      if (err instanceof NotFoundError) {
+        return new HttpNotFoundError()
+      }
+
+      return err
+    })()
+
+    if (!(error instanceof PublicError)) {
       res
         .status(HTTP_ERRORS.INTERNAL_SERVER_ERROR)
         .send({ error: "Something went wrong." })
 
       // eslint-disable-next-line no-console
-      console.error(err)
+      console.error(error)
 
       return
     }
 
-    if (err instanceof HttpPublicError) {
-      res.status(err.statusCode)
+    if (error instanceof HttpPublicError) {
+      res.status(error.statusCode)
     }
 
-    res.send({ error: err.message })
+    res.send({ error: error.message })
   } finally {
     await db.destroy()
   }

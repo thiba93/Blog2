@@ -1,7 +1,8 @@
 import knexfile from "@@/knexfile.mjs"
-import { ValidationError, object, string } from "yup"
+import { ValidationError, boolean, object, string } from "yup"
 
 const validationSchema = object({
+  isDevMode: boolean().default(false),
   db: object({
     client: string().oneOf(["pg"]).required(),
     connection: string().required(),
@@ -12,6 +13,7 @@ let config = null
 try {
   config = validationSchema.validateSync(
     {
+      isDevMode: process.env.NODE_ENV === "development",
       db: knexfile,
     },
     { abortEarly: false },
