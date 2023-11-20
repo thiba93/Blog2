@@ -1,5 +1,6 @@
 import mw from "@/api/middlewares/mw"
 import validate from "@/api/middlewares/validate"
+import ProductModel from "@/db/models/ProductModel"
 import {
   descriptionValidator,
   idValidator,
@@ -31,14 +32,14 @@ const handle = mw({
     }),
     async ({
       res,
-      db,
       input: {
         query: { page },
       },
     }) => {
-      const query = db("products")
+      const query = ProductModel.query()
       const products = await query
         .clone()
+        .withGraphFetched("category")
         .limit(webConfig.pagination.limit)
         .offset((page - 1) * webConfig.pagination.limit)
       const [{ count }] = await query.clone().count()

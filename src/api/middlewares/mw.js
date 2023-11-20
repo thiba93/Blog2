@@ -1,5 +1,6 @@
 import config from "@/api/config"
 import { HttpPublicError, PublicError } from "@/api/errors"
+import BaseModel from "@/db/models/BaseModel"
 import { HTTP_ERRORS } from "@/pages/api/constants"
 import knex from "knex"
 
@@ -13,6 +14,9 @@ const mw = (methodHandlers) => async (req, res) => {
   }
 
   const db = knex(config.db)
+
+  BaseModel.knex(db)
+
   let currentHandlerIndex = -1
   const next = async () => {
     currentHandlerIndex += 1
