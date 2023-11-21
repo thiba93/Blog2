@@ -1,3 +1,4 @@
+// eslint-disable-next-line max-classes-per-file
 import BaseModel from "@/db/models/BaseModel"
 import CategoryModel from "@/db/models/CategoryModel"
 

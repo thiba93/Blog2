@@ -6,7 +6,6 @@ import {
   nameValidator,
   pageValidator,
 } from "@/utils/validators"
-import webConfig from "@/web/config"
 
 const handle = mw({
   POST: [
@@ -40,8 +39,7 @@ const handle = mw({
       const products = await query
         .clone()
         .withGraphFetched("category")
-        .limit(webConfig.pagination.limit)
-        .offset((page - 1) * webConfig.pagination.limit)
+        .page(page)
       const [{ count }] = await query.clone().count()
 
       res.send({
