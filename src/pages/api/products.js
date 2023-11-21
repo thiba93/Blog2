@@ -16,10 +16,10 @@ const handle = mw({
         categoryId: idValidator.required(),
       },
     }),
-    async ({ res, input: { body }, models: { ProductModel } }) => {
+    async ({ send, input: { body }, models: { ProductModel } }) => {
       const newProduct = await ProductModel.query().insertAndFetch(body)
 
-      res.send(newProduct)
+      send(newProduct)
     },
   ],
   GET: [
@@ -29,7 +29,7 @@ const handle = mw({
       },
     }),
     async ({
-      res,
+      send,
       input: {
         query: { page },
       },
@@ -42,12 +42,7 @@ const handle = mw({
         .page(page)
       const [{ count }] = await query.clone().count()
 
-      res.send({
-        result: products,
-        meta: {
-          count,
-        },
-      })
+      send(products, { count })
     },
   ],
 })

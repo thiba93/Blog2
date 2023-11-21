@@ -10,7 +10,7 @@ const handle = mw({
       },
     }),
     async ({
-      res,
+      send,
       input: {
         query: { categoryId },
       },
@@ -20,7 +20,7 @@ const handle = mw({
         .findById(categoryId)
         .throwIfNotFound()
 
-      res.send(category)
+      send(category)
     },
   ],
   PATCH: [
@@ -33,7 +33,7 @@ const handle = mw({
       },
     }),
     async ({
-      res,
+      send,
       input: {
         query: { categoryId },
         body,
@@ -44,7 +44,7 @@ const handle = mw({
         .updateAndFetchById(categoryId, body)
         .throwIfNotFound()
 
-      res.send(updatedCategory)
+      send(updatedCategory)
     },
   ],
   DELETE: [
@@ -54,7 +54,7 @@ const handle = mw({
       },
     }),
     async ({
-      res,
+      send,
       input: {
         query: { categoryId },
       },
@@ -66,7 +66,7 @@ const handle = mw({
 
       await category.$query().delete()
 
-      res.send(category)
+      send(category)
     },
   ],
 })

@@ -9,10 +9,10 @@ const handle = mw({
         name: nameValidator.required(),
       },
     }),
-    async ({ res, input: { body }, models: { CategoryModel } }) => {
+    async ({ send, input: { body }, models: { CategoryModel } }) => {
       const newCategory = await CategoryModel.query().insertAndFetch(body)
 
-      res.send(newCategory)
+      send(newCategory)
     },
   ],
   GET: [
@@ -22,7 +22,7 @@ const handle = mw({
       },
     }),
     async ({
-      res,
+      send,
       input: {
         query: { page },
       },
@@ -32,12 +32,7 @@ const handle = mw({
       const categories = await query.clone().page(page)
       const [{ count }] = await query.clone().count()
 
-      res.send({
-        result: categories,
-        meta: {
-          count,
-        },
-      })
+      send(categories, { count })
     },
   ],
 })

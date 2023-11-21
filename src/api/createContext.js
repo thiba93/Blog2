@@ -5,6 +5,12 @@ import ProductModel from "@/db/models/ProductModel"
 import knex from "knex"
 
 export const createContext = (req, res, next) => {
+  const send = (result, meta = {}) => {
+    res.send({
+      result: Array.isArray(result) ? result : [result],
+      meta,
+    })
+  }
   const db = knex(config.db)
 
   if (config.isDevMode) {
@@ -18,6 +24,7 @@ export const createContext = (req, res, next) => {
     req,
     res,
     next,
+    send,
     db,
     models: {
       CategoryModel,

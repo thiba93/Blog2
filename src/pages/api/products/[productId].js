@@ -14,7 +14,7 @@ const handle = mw({
       },
     }),
     async ({
-      res,
+      send,
       input: {
         query: { productId },
       },
@@ -25,7 +25,7 @@ const handle = mw({
         .withGraphFetched("category")
         .throwIfNotFound()
 
-      res.send(product)
+      send(product)
     },
   ],
   PATCH: [
@@ -39,7 +39,7 @@ const handle = mw({
       },
     }),
     async ({
-      res,
+      send,
       input: {
         query: { productId },
         body,
@@ -51,7 +51,7 @@ const handle = mw({
         .withGraphFetched("category")
         .throwIfNotFound()
 
-      res.send(updatedProduct)
+      send(updatedProduct)
     },
   ],
   DELETE: [
@@ -61,7 +61,7 @@ const handle = mw({
       },
     }),
     async ({
-      res,
+      send,
       input: {
         query: { productId },
       },
@@ -73,7 +73,7 @@ const handle = mw({
 
       await product.$query().delete()
 
-      res.send(product)
+      send(product)
     },
   ],
 })
