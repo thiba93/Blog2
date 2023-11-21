@@ -1,9 +1,6 @@
-import config from "@/api/config"
+import { createContext } from "@/api/createContext"
 import { HttpNotFoundError, HttpPublicError, PublicError } from "@/api/errors"
-import BaseModel from "@/db/models/BaseModel"
-import ProductModel from "@/db/models/ProductModel"
 import { HTTP_ERRORS } from "@/pages/api/constants"
-import knex from "knex"
 import { NotFoundError } from "objection"
 
 const mw = (methodHandlers) => async (req, res) => {
@@ -15,14 +12,6 @@ const mw = (methodHandlers) => async (req, res) => {
     return
   }
 
-  const db = knex(config.db)
-
-  if (config.isDevMode) {
-    db.on("query", ({ sql, bindings }) => console.info({ sql, bindings }))
-  }
-
-  BaseModel.knex(db)
-
   let currentHandlerIndex = -1
   const next = async () => {
     currentHandlerIndex += 1
@@ -30,15 +19,7 @@ const mw = (methodHandlers) => async (req, res) => {
 
     await handleNext(ctx)
   }
-  const ctx = {
-    req,
-    res,
-    next,
-    db,
-    models: {
-      ProductModel,
-    },
-  }
+  const ctx = createContext(req, res, next)
 
   try {
     await next()
@@ -68,7 +49,7 @@ const mw = (methodHandlers) => async (req, res) => {
 
     res.send({ error: error.message })
   } finally {
-    await db.destroy()
+    await ctx.db.destroy()
   }
 }
 

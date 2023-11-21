@@ -1,5 +1,5 @@
-import mw from "@/api/middlewares/mw"
 import validate from "@/api/middlewares/validate"
+import mw from "@/api/mw"
 import {
   descriptionValidator,
   idValidator,
