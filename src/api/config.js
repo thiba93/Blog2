@@ -7,6 +7,12 @@ const validationSchema = object({
     client: string().oneOf(["pg"]).required(),
     connection: string().required(),
   }).noUnknown(),
+  security: object({
+    jwt: object({
+      secret: string().required(),
+      expiresIn: string().required(),
+    }),
+  }),
 })
 let config = null
 
@@ -15,6 +21,12 @@ try {
     {
       isDevMode: process.env.NODE_ENV === "development",
       db: knexfile,
+      security: {
+        jwt: {
+          secret: process.env.SECURITY__JWT__SECRET,
+          expiresIn: "2 days",
+        },
+      },
     },
     { abortEarly: false },
   )

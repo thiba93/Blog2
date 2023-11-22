@@ -2,6 +2,7 @@ import config from "@/api/config"
 import BaseModel from "@/db/models/BaseModel"
 import CategoryModel from "@/db/models/CategoryModel"
 import ProductModel from "@/db/models/ProductModel"
+import UserModel from "@/db/models/UserModel"
 import knex from "knex"
 
 export const createContext = (req, res, next) => {
@@ -29,6 +30,7 @@ export const createContext = (req, res, next) => {
     models: {
       CategoryModel,
       ProductModel,
+      UserModel,
     },
   }
 }

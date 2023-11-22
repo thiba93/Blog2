@@ -36,3 +36,11 @@ export class HttpArgumentsError extends HttpPublicError {
     )
   }
 }
+
+export class HttpAuthenticationError extends HttpPublicError {
+  statusCode = HTTP_ERRORS.UNAUTHORIZED
+
+  constructor(message = "Invalid credentials") {
+    super(message)
+  }
+}

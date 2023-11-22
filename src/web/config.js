@@ -1,6 +1,11 @@
-import { ValidationError, number, object } from "yup"
+import { ValidationError, number, object, string } from "yup"
 
 const validationSchema = object({
+  security: object({
+    session: object({
+      jwtKey: string().required(),
+    }).noUnknown(),
+  }).noUnknown(),
   pagination: object({
     limit: number().max(20).required(),
     maxDisplayed: number().max(5).required(),
@@ -11,6 +16,11 @@ let config = null
 try {
   config = validationSchema.validateSync(
     {
+      security: {
+        session: {
+          jwtKey: "sessionJsonWebToken",
+        },
+      },
       pagination: {
         limit: 5,
         maxDisplayed: 3,
