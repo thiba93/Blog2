@@ -1,3 +1,4 @@
+import auth from "@/api/middlewares/auth"
 import validate from "@/api/middlewares/validate"
 import mw from "@/api/mw"
 import {
@@ -9,6 +10,7 @@ import {
 
 const handle = mw({
   POST: [
+    auth,
     validate({
       body: {
         name: nameValidator.required(),

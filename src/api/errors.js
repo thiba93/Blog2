@@ -44,3 +44,11 @@ export class HttpAuthenticationError extends HttpPublicError {
     super(message)
   }
 }
+
+export class HttpForbiddenError extends HttpPublicError {
+  statusCode = HTTP_ERRORS.FORBIDDEN
+
+  constructor(message = "Forbidden") {
+    super(message)
+  }
+}

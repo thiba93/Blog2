@@ -1,12 +1,13 @@
 import "@/styles/globals.css"
+import MainMenu from "@/web/components/MainMenu"
+import { SessionContextProvider } from "@/web/components/SessionContext"
 import Link from "@/web/components/ui/Link"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 
 const queryClient = new QueryClient()
-
-export default function App({ Component: Page, pageProps }) {
-  return (
-    <div>
+const App = ({ Component: Page, pageProps }) => (
+  <div>
+    <SessionContextProvider>
       <QueryClientProvider client={queryClient}>
         <header className="border-b-2">
           <div className="max-w-3xl mx-auto flex items-center p-4">
@@ -15,26 +16,15 @@ export default function App({ Component: Page, pageProps }) {
                 BEST WEBSITE E.V.E.R
               </Link>
             </h1>
-            <nav className="ms-auto">
-              <ul className="flex gap-4">
-                <li>
-                  <Link href="/" styless>
-                    Home
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/products/create" styless>
-                    Create product
-                  </Link>
-                </li>
-              </ul>
-            </nav>
+            <MainMenu className="ms-auto" />
           </div>
         </header>
         <div className="max-w-3xl mx-auto">
           <Page {...pageProps} />
         </div>
       </QueryClientProvider>
-    </div>
-  )
-}
+    </SessionContextProvider>
+  </div>
+)
+
+export default App

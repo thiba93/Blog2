@@ -1,15 +1,16 @@
 import config from "@/api/config"
-import webConfig from "@/web/config"
 import { HttpAuthenticationError } from "@/api/errors"
 import validate from "@/api/middlewares/validate"
 import mw from "@/api/mw"
-import hashPassword from "@/db/hashPassword"
-import { emailValidator } from "@/utils/validators"
-import jsonwebtoken from "jsonwebtoken"
-import { string } from "yup"
-import { NextResponse } from "next/server"
-import ms from "ms"
 import genCookies from "@/api/utils/genCookies"
+import hashPassword from "@/db/hashPassword"
+import { AVERAGE_PASSWORD_HASHING_DURATION } from "@/pages/api/constants"
+import sleep from "@/utils/sleep"
+import { emailValidator } from "@/utils/validators"
+import webConfig from "@/web/config"
+import jsonwebtoken from "jsonwebtoken"
+import ms from "ms"
+import { string } from "yup"
 
 const handle = mw({
   POST: [
@@ -19,6 +20,7 @@ const handle = mw({
         password: string().required(),
       },
     }),
+    // eslint-disable-next-line max-lines-per-function
     async ({
       send,
       res,
@@ -30,6 +32,8 @@ const handle = mw({
       const user = await UserModel.query().findOne({ email })
 
       if (!user) {
+        await sleep(AVERAGE_PASSWORD_HASHING_DURATION)
+
         throw new HttpAuthenticationError()
       }
 
@@ -42,13 +46,16 @@ const handle = mw({
       const jwt = jsonwebtoken.sign(
         {
           payload: {
-            session: {
-              user: {
-                id: user.id,
-              },
+            user: {
+              id: user.id,
             },
           },
         },
+        config.security.jwt.secret,
+        { expiresIn: config.security.jwt.expiresIn },
+      )
+      const cookieJwt = jsonwebtoken.sign(
+        { payload: jwt },
         config.security.jwt.secret,
         { expiresIn: config.security.jwt.expiresIn },
       )
@@ -56,14 +63,16 @@ const handle = mw({
       res.setHeader(
         "set-cookie",
         genCookies({
-          name: webConfig.security.session.jwtKey,
-          value: jwt,
-          expires: ms(config.security.jwt.expiresIn),
+          name: webConfig.security.session.cookie.key,
+          value: cookieJwt,
+          expires: Date.now() + ms(config.security.jwt.expiresIn),
           path: "/",
           sameSite: "strict",
+          httpOnly: true,
+          secure: webConfig.security.session.cookie.secure,
         }),
       )
-      send(true)
+      send(jwt)
     },
   ],
 })

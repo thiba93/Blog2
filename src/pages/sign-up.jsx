@@ -3,8 +3,8 @@ import Alert from "@/web/components/ui/Alert"
 import Form from "@/web/components/ui/Form"
 import FormField from "@/web/components/ui/FormField"
 import SubmitButton from "@/web/components/ui/SubmitButton"
+import { createResource } from "@/web/services/apiClient"
 import { useMutation } from "@tanstack/react-query"
-import axios from "axios"
 import { Formik } from "formik"
 import { object } from "yup"
 
@@ -18,7 +18,7 @@ const validationSchema = object({
 })
 const SignUpPage = () => {
   const { mutateAsync, isSuccess } = useMutation({
-    mutationFn: (data) => axios.post("/api/users", data),
+    mutationFn: (data) => createResource("users", data),
   })
   const handleSubmit = async ({ email, password }) => {
     await mutateAsync({ email, password })

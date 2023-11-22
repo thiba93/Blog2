@@ -1,6 +1,12 @@
 import { createContext } from "@/api/createContext"
-import { HttpNotFoundError, HttpPublicError, PublicError } from "@/api/errors"
+import {
+  HttpForbiddenError,
+  HttpNotFoundError,
+  HttpPublicError,
+  PublicError,
+} from "@/api/errors"
 import { HTTP_ERRORS } from "@/pages/api/constants"
+import { JsonWebTokenError } from "jsonwebtoken"
 import { NotFoundError } from "objection"
 
 const mw = (methodHandlers) => async (req, res) => {
@@ -25,6 +31,10 @@ const mw = (methodHandlers) => async (req, res) => {
     await next()
   } catch (err) {
     const error = (() => {
+      if (err instanceof JsonWebTokenError) {
+        return new HttpForbiddenError()
+      }
+
       if (err instanceof NotFoundError) {
         return new HttpNotFoundError()
       }

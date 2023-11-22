@@ -2,8 +2,8 @@ import { pageValidator } from "@/utils/validators"
 import ProductHeadline from "@/web/components/ProductHeadline"
 import Pagination from "@/web/components/ui/Pagination"
 import config from "@/web/config"
+import { readResource } from "@/web/services/apiClient"
 import { useQuery } from "@tanstack/react-query"
-import axios from "axios"
 
 export const getServerSideProps = ({ query: { page } }) => ({
   props: {
@@ -17,7 +17,7 @@ const IndexPage = (props) => {
     data: { data: { result: products, meta: { count } = {} } = {} } = {},
   } = useQuery({
     queryKey: ["products", page],
-    queryFn: () => axios("/api/products", { params: { page } }),
+    queryFn: () => readResource("products", { params: { page } }),
   })
   const countPages = Math.ceil(count / config.pagination.limit)
 

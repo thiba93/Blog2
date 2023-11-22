@@ -2,8 +2,8 @@ import { descriptionValidator, nameValidator } from "@/utils/validators"
 import Button from "@/web/components/ui/Button"
 import Form from "@/web/components/ui/Form"
 import FormField from "@/web/components/ui/FormField"
+import { createResource } from "@/web/services/apiClient"
 import { useMutation } from "@tanstack/react-query"
-import axios from "axios"
 import { Formik } from "formik"
 import { useRouter } from "next/router"
 import { useCallback } from "react"
@@ -21,7 +21,7 @@ const initialValues = {
 const CreatePage = () => {
   const router = useRouter()
   const { mutateAsync: saveProduct } = useMutation({
-    mutationFn: (product) => axios.post("/api/products", product),
+    mutationFn: (product) => createResource("products", product),
   })
   const handleSubmit = useCallback(
     async ({ name, description, categoryId }) => {
@@ -31,7 +31,7 @@ const CreatePage = () => {
         categoryId,
       })
 
-      router.push(`/products/${product.id}`)
+      // router.push(`/products/${product.id}`)
     },
     [saveProduct, router],
   )

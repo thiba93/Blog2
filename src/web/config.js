@@ -1,9 +1,12 @@
-import { ValidationError, number, object, string } from "yup"
+import { ValidationError, boolean, number, object, string } from "yup"
 
 const validationSchema = object({
   security: object({
     session: object({
-      jwtKey: string().required(),
+      cookie: object({
+        key: string().required(),
+        secure: boolean().required(),
+      }).noUnknown(),
     }).noUnknown(),
   }).noUnknown(),
   pagination: object({
@@ -18,7 +21,10 @@ try {
     {
       security: {
         session: {
-          jwtKey: "sessionJsonWebToken",
+          cookie: {
+            key: "sessionJsonWebToken",
+            secure: process.env.NODE_ENV !== "development",
+          },
         },
       },
       pagination: {

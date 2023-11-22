@@ -3,6 +3,7 @@ import clsx from "clsx"
 
 const variants = {
   info: "bg-blue-100 text-blue-900",
+  danger: "bg-red-100 text-red-900",
 }
 const Alert = (props) => {
   const {
