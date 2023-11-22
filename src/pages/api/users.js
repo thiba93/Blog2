@@ -1,6 +1,8 @@
 import validate from "@/api/middlewares/validate"
 import mw from "@/api/mw"
 import hashPassword from "@/db/hashPassword"
+import { AVERAGE_PASSWORD_HASHING_DURATION } from "@/pages/api/constants"
+import sleep from "@/utils/sleep"
 import { emailValidator, passwordValidator } from "@/utils/validators"
 
 const handle = mw({
@@ -21,6 +23,8 @@ const handle = mw({
       const user = await UserModel.query().findOne({ email })
 
       if (user) {
+        await sleep(AVERAGE_PASSWORD_HASHING_DURATION)
+
         send(true)
 
         return

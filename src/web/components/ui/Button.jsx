@@ -19,7 +19,12 @@ const Button = (props) => {
 
   return (
     <Component
-      className={clsx(variants[variant], sizes[size], className)}
+      className={clsx(
+        "disabled:bg-gray-400",
+        variants[variant],
+        sizes[size],
+        className,
+      )}
       {...otherProps}
     />
   )
