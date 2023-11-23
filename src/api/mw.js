@@ -5,11 +5,51 @@ import {
   HttpPublicError,
   PublicError,
 } from "@/api/errors"
+import createLogger, { SCOPES } from "@/api/utils/createLogger"
 import { HTTP_ERRORS } from "@/pages/api/constants"
 import { JsonWebTokenError } from "jsonwebtoken"
+import { randomUUID } from "node:crypto"
 import { NotFoundError } from "objection"
 
+const handleError = (err, { res, logger }) => {
+  const error = (() => {
+    if (err instanceof JsonWebTokenError) {
+      return new HttpForbiddenError()
+    }
+
+    if (err instanceof NotFoundError) {
+      return new HttpNotFoundError()
+    }
+
+    return err
+  })()
+
+  if (!(error instanceof PublicError)) {
+    res
+      .status(HTTP_ERRORS.INTERNAL_SERVER_ERROR)
+      .send({ error: "Something went wrong." })
+
+    // eslint-disable-next-line no-console
+    logger.error(error)
+
+    return
+  }
+
+  if (error instanceof HttpPublicError) {
+    res.status(error.statusCode)
+  }
+
+  res.send({ error: error.message })
+}
 const mw = (methodHandlers) => async (req, res) => {
+  const requestId = randomUUID()
+  const logger = {
+    info: createLogger(SCOPES.INFO),
+    debug: createLogger(SCOPES.DEBUG),
+    error: createLogger(SCOPES.ERROR),
+  }
+  logger.info({ type: "HTTP", requestId, method: req.method, url: req.url })
+
   const handlers = methodHandlers[req.method.toUpperCase()]
 
   if (!handlers) {
@@ -25,39 +65,18 @@ const mw = (methodHandlers) => async (req, res) => {
 
     await handleNext(ctx)
   }
-  const ctx = createContext(req, res, next)
+  const ctx = createContext({
+    req,
+    res,
+    next,
+    requestId,
+    logger,
+  })
 
   try {
     await next()
   } catch (err) {
-    const error = (() => {
-      if (err instanceof JsonWebTokenError) {
-        return new HttpForbiddenError()
-      }
-
-      if (err instanceof NotFoundError) {
-        return new HttpNotFoundError()
-      }
-
-      return err
-    })()
-
-    if (!(error instanceof PublicError)) {
-      res
-        .status(HTTP_ERRORS.INTERNAL_SERVER_ERROR)
-        .send({ error: "Something went wrong." })
-
-      // eslint-disable-next-line no-console
-      console.error(error)
-
-      return
-    }
-
-    if (error instanceof HttpPublicError) {
-      res.status(error.statusCode)
-    }
-
-    res.send({ error: error.message })
+    await handleError(err, ctx)
   } finally {
     await ctx.db.destroy()
   }

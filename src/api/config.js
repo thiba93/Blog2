@@ -7,6 +7,13 @@ const validationSchema = object({
     client: string().oneOf(["pg"]).required(),
     connection: string().required(),
   }).noUnknown(),
+  logger: object({
+    paths: object({
+      debug: string().required(),
+      info: string().required(),
+      error: string().required(),
+    }).noUnknown(),
+  }).noUnknown(),
   security: object({
     jwt: object({
       secret: string().required(),
@@ -21,6 +28,13 @@ try {
     {
       isDevMode: process.env.NODE_ENV === "development",
       db: knexfile,
+      logger: {
+        paths: {
+          debug: process.env.LOGGER__PATHS__DEBUG,
+          info: process.env.LOGGER__PATHS__INFO,
+          error: process.env.LOGGER__PATHS__ERROR,
+        },
+      },
       security: {
         jwt: {
           secret: process.env.SECURITY__JWT__SECRET,
