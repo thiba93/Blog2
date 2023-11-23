@@ -1,4 +1,5 @@
 import config from "@/web/config"
+import { deleteResource } from "@/web/services/apiClient"
 import jsonwebtoken from "jsonwebtoken"
 import {
   createContext,
@@ -18,6 +19,11 @@ export const SessionContextProvider = (props) => {
 
     setSession(payload)
   }, [])
+  const signOut = useCallback(async () => {
+    await deleteResource("sessions")
+    localStorage.removeItem(config.security.session.cookie.key)
+    setSession(null)
+  }, [])
 
   useEffect(() => {
     const jwt = localStorage.getItem(config.security.session.cookie.key)
@@ -31,7 +37,9 @@ export const SessionContextProvider = (props) => {
     setSession(payload)
   }, [])
 
-  return <SessionContext.Provider {...props} value={{ session, signIn }} />
+  return (
+    <SessionContext.Provider {...props} value={{ session, signIn, signOut }} />
+  )
 }
 const SessionContext = createContext()
 

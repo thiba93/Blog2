@@ -1,5 +1,6 @@
 import config from "@/api/config"
 import { HttpAuthenticationError } from "@/api/errors"
+import auth from "@/api/middlewares/auth"
 import validate from "@/api/middlewares/validate"
 import mw from "@/api/mw"
 import genCookies from "@/api/utils/genCookies"
@@ -73,6 +74,24 @@ const handle = mw({
         }),
       )
       send(jwt)
+    },
+  ],
+  DELETE: [
+    auth,
+    ({ send, res }) => {
+      res.setHeader(
+        "set-cookie",
+        genCookies({
+          name: webConfig.security.session.cookie.key,
+          value: "null",
+          expires: Date.now() - ms("10 years"),
+          path: "/",
+          sameSite: "strict",
+          httpOnly: true,
+          secure: webConfig.security.session.cookie.secure,
+        }),
+      )
+      send(true)
     },
   ],
 })

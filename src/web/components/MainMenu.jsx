@@ -2,7 +2,7 @@ import { useSession } from "@/web/components/SessionContext"
 import Link from "@/web/components/ui/Link"
 
 const MainMenu = ({ children: _, ...otherProps }) => {
-  const { session } = useSession()
+  const { session, signOut } = useSession()
 
   return (
     <nav {...otherProps}>
@@ -18,6 +18,9 @@ const MainMenu = ({ children: _, ...otherProps }) => {
               <Link href="/products/create" styless>
                 Create product
               </Link>
+            </li>
+            <li>
+              <button onClick={signOut}>Logout</button>
             </li>
           </>
         ) : (
