@@ -12,6 +12,16 @@ const MainMenu = ({ children: _, ...otherProps }) => {
             Home
           </Link>
         </li>
+        <li>
+          <Link href="/products/editOrDelete" styless>
+            pro del
+          </Link>
+        </li>
+        <li>
+          <Link href="/users/list" styless>
+            Users
+          </Link>
+        </li>
         {session ? (
           <>
             <li>

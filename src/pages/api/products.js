@@ -47,6 +47,39 @@ const handle = mw({
       send(products, { count })
     },
   ],
-})
+  DELETE: [
+    auth,
+    validate({
+      params: {
+        productId: idValidator.required(),
+      },
+    }),
+    async ({ send, input: { params: { productId } }, models: { ProductModel } }) => {
+      await ProductModel.query().deleteById(productId);
+      send({ message: 'Product deleted successfully' });
+    },
+  ],
+  PUT: [
+    auth,
+    validate({
+      params: {
+        productId: idValidator.required(),
+      },
+      body: {
+        name: nameValidator,
+        description: descriptionValidator,
+        categoryId: idValidator,
+      },
+    }),
+    async ({ send, input: { body, params }, models: { ProductModel } }) => {
+      const updatedProduct = await ProductModel.query()
+        .patchAndFetchById(params.productId, body);
+  
+      send(updatedProduct);
+    },
+  ],
+});
+
+
 
 export default handle
