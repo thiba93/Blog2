@@ -14,12 +14,17 @@ const MainMenu = ({ children: _, ...otherProps }) => {
         </li>
         <li>
           <Link href="/products/editOrDelete" styless>
-            pro del
+            product delete
           </Link>
         </li>
         <li>
           <Link href="/users/list" styless>
             Users
+          </Link>
+        </li>
+        <li>
+          <Link href="/users/create" styless>
+            create users
           </Link>
         </li>
         {session ? (

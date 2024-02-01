@@ -3,7 +3,7 @@ import mw from "@/api/mw"
 import hashPassword from "@/db/hashPassword"
 import { AVERAGE_PASSWORD_HASHING_DURATION } from "@/pages/api/constants"
 import sleep from "@/utils/sleep"
-import { emailValidator, passwordValidator } from "@/utils/validators"
+import { emailValidator, passwordValidator,userIdValidator } from "@/utils/validators"
 import { pageValidator } from "@/utils/validators"
 
 const handle = mw({
@@ -56,6 +56,18 @@ const handle = mw({
       send(true)
     },
   ],
-})
+  DELETE: [
+    validate({
+      query: {
+        userId: userIdValidator.required(), // Assurez-vous d'avoir un validateur pour l'ID de l'utilisateur
+      },
+    }),
+    async ({ send, input: { query: { userId } }, models: { UserModel } }) => {
+      await UserModel.query().deleteById(userId);
+      send({ message: 'User deleted successfully' });
+    },
+  ],
+});
+
 
 export default handle

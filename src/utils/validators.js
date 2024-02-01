@@ -16,3 +16,8 @@ export const passwordValidator = string()
     /(?=.*\p{Lu})(?=.*\p{Ll})(?=.*\d)(?=.*[^\d\p{L}]).*/u,
     "Must contain: 1 lower & 1 upper letters, 1 digit and 1 spe. char.",
   )
+
+export const userIdValidator = number()
+  .required('User ID is required')
+  .positive('User ID must be a positive number')
+  .integer('User ID must be an integer');
