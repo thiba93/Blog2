@@ -5,6 +5,7 @@ import { AVERAGE_PASSWORD_HASHING_DURATION } from "@/pages/api/constants"
 import sleep from "@/utils/sleep"
 import { emailValidator, passwordValidator,userIdValidator } from "@/utils/validators"
 import { pageValidator } from "@/utils/validators"
+import auth from "@/api/middlewares/auth"
 
 const handle = mw({
   GET: [
