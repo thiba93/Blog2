@@ -27,8 +27,8 @@ const EditPage = () => {
   useEffect(() => {
     if (productData) {
       setInitialValues({
-        name: productData.name,
-        description: productData.description,
+        name: productData.data.result[0].name,
+        description: productData.data.result[0].description,
         // Mettez à jour avec d'autres champs si nécessaire
       });
     }

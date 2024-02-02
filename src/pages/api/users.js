@@ -68,6 +68,25 @@ const handle = mw({
       send({ message: 'User deleted successfully' });
     },
   ],
+  // Ajoutez cette méthode PUT dans votre gestionnaire existant dans src/pages/api/users.js
+
+PUT: [
+  validate({
+    query: {
+      userId: userIdValidator.required(),
+    },
+    body: {
+      email: emailValidator, // Assurez-vous que ces validateurs existent et sont appropriés
+      password: passwordValidator, // Vous voudrez peut-être hasher le mot de passe avant de le stocker
+      // Ajoutez des validateurs pour d'autres champs si nécessaire
+    },
+  }),
+  async ({ send, input: { query: { userId }, body }, models: { UserModel } }) => {
+    const updatedUser = await UserModel.query().patchAndFetchById(userId, body);
+    send(updatedUser);
+  },
+],
+
 });
 
 

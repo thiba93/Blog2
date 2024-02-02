@@ -4,6 +4,8 @@ import Pagination from "@/web/components/ui/Pagination";
 import config from "@/web/config";
 import { readResource } from "@/web/services/apiClient";
 import { useQuery } from "@tanstack/react-query";
+import Link from 'next/link';
+
 
 export const getServerSideProps = ({ query: { page } }) => ({
   props: {
@@ -33,7 +35,14 @@ const UsersPage = (props) => {
       <ul className="flex flex-col gap-8">
         {users.map((user) => (
           <li key={user.id} className="flex justify-between items-center">
-            <UserComponent {...user} />
+               <Link href={`/users/${user.id}`}>
+    
+        <UserComponent {...user} />
+      
+    </Link>
+    <Link href={`/users/edit?userId=${user.id}`} passHref>
+              <button>Edit</button>
+            </Link>
 
           </li>
         ))}

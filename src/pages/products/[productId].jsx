@@ -9,13 +9,10 @@ const ProductPage = () => {
 
   const fetchProduct = async (productId) => {
     try {
-      const response = await axios.get(`/api/products/${productId}`);
-      
+      const response = await axios.get(`/api/products/${productId}`);     
       return response.data;
-
     } catch (error) {
-      console.error("Failed to fetch product data:", error);
-      
+      console.error("Failed to fetch product data:", error);      
       throw new Error("Failed to fetch product data");
     }
   };
@@ -48,7 +45,7 @@ const ProductPage = () => {
   return (
     <article>
       <h1 className="text-2xl">
-        {product.result[0].name} (#{productId})
+        {product.result[0].name} (#{productId} {product.result[0].categoryId})
       </h1>
       <p>{product.result[0].description}</p>
     </article>
