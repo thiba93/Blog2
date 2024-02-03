@@ -27,6 +27,11 @@ const MainMenu = ({ children: _, ...otherProps }) => {
             create users
           </Link>
         </li>
+        <li>
+          <Link href="/profile" styless>
+            profile
+          </Link>
+        </li>
         {session ? (
           <>
             <li>
@@ -34,6 +39,7 @@ const MainMenu = ({ children: _, ...otherProps }) => {
                 Create product
               </Link>
             </li>
+
             <li>
               <button onClick={signOut}>Logout</button>
             </li>

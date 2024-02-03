@@ -25,12 +25,14 @@ const CreatePage = () => {
   })
   const handleSubmit = useCallback(
     async ({ name, description, categoryId }) => {
+      // eslint-disable-next-line no-unused-vars
       const { data: product } = await saveProduct({
         name,
         description,
         categoryId,
       })
 
+      // eslint-disable-next-line capitalized-comments
       // router.push(`/products/${product.id}`)
     },
     [saveProduct, router],

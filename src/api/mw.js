@@ -11,7 +11,7 @@ import { JsonWebTokenError } from "jsonwebtoken"
 import { randomUUID } from "node:crypto"
 import { NotFoundError } from "objection"
 
-const handleError = (err, { res, logger }) => {
+const handleError = (err, { res }) => {
   const error = (() => {
     if (err instanceof JsonWebTokenError) {
       return new HttpForbiddenError()
