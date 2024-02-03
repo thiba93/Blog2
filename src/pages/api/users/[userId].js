@@ -44,8 +44,6 @@ const handle = mw({
       models: { UserModel },
     }) => {
       if (body.password) {
-
-        
         // Compare this snippet from src/pages/api/users/%5BuserId%5D.js:
       }
 

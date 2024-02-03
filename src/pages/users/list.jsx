@@ -1,33 +1,32 @@
-import { pageValidator } from "@/utils/validators";
-import UserComponent from "@/web/components/UserComponent";
-import Pagination from "@/web/components/ui/Pagination";
-import config from "@/web/config";
-import { readResource } from "@/web/services/apiClient";
-import { useQuery } from "@tanstack/react-query";
-import Link from 'next/link';
+import { pageValidator } from "@/utils/validators"
+import UserComponent from "@/web/components/UserComponent"
+import Pagination from "@/web/components/ui/Pagination"
+import config from "@/web/config"
+import { readResource } from "@/web/services/apiClient"
+import { useQuery } from "@tanstack/react-query"
+import Link from "next/link"
 
 
 export const getServerSideProps = ({ query: { page } }) => ({
   props: {
     page: pageValidator.validateSync(page),
   },
-});
-
+})
 const UsersPage = (props) => {
-  const { page } = props;
+  const { page } = props
   const {
     isLoading,
     data: { data: { result: users, meta: { count } = {} } = {} } = {},
   } = useQuery({
     queryKey: ["users", page],
     queryFn: () => readResource("users", { params: { page } }),
-  });
-  const countPages = Math.ceil(count / config.pagination.limit);
+  })
+  const countPages = Math.ceil(count / config.pagination.limit)
 
 
 
   if (isLoading || !users) {
-    return <div className="text-center p-32 animate-bounce">Loading...</div>;
+    return <div className="text-center p-32 animate-bounce">Loading...</div>
   }
 
   return (
@@ -49,7 +48,7 @@ const UsersPage = (props) => {
       </ul>
       <Pagination pathname="/users/list" page={page} countPages={countPages} />
     </div>
-  );
-};
+  )
+}
 
-export default UsersPage;
+export default UsersPage

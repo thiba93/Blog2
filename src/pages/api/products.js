@@ -55,8 +55,8 @@ const handle = mw({
       },
     }),
     async ({ send, input: { params: { productId } }, models: { ProductModel } }) => {
-      await ProductModel.query().deleteById(productId);
-      send({ message: 'Product deleted successfully' });
+      await ProductModel.query().deleteById(productId)
+      send({ message: "Product deleted successfully" })
     },
   ],
   PUT: [
@@ -73,12 +73,12 @@ const handle = mw({
     }),
     async ({ send, input: { body, params }, models: { ProductModel } }) => {
       const updatedProduct = await ProductModel.query()
-        .patchAndFetchById(params.productId, body);
+        .patchAndFetchById(params.productId, body)
   
-      send(updatedProduct);
+      send(updatedProduct)
     },
   ],
-});
+})  
 
 
 

@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import { useSession } from "@/web/components/SessionContext"
 import Link from "@/web/components/ui/Link"
 

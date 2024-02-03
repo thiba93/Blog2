@@ -3,7 +3,12 @@ import mw from "@/api/mw"
 import hashPassword from "@/db/hashPassword"
 import { AVERAGE_PASSWORD_HASHING_DURATION } from "@/pages/api/constants"
 import sleep from "@/utils/sleep"
-import { emailValidator, passwordValidator,userIdValidator,pageValidator } from "@/utils/validators"
+import {
+  emailValidator,
+  passwordValidator,
+  userIdValidator,
+  pageValidator,
+} from "@/utils/validators"
 
 const handle = mw({
   GET: [
@@ -12,7 +17,13 @@ const handle = mw({
         page: pageValidator.required(),
       },
     }),
-    async ({ send, input: { query: { page } }, models: { UserModel } }) => {
+    async ({
+      send,
+      input: {
+        query: { page },
+      },
+      models: { UserModel },
+    }) => {
       const query = UserModel.query()
       const users = await query.page(page)
       const [{ count }] = await query.clone().count()
@@ -58,32 +69,46 @@ const handle = mw({
   DELETE: [
     validate({
       query: {
-        userId: userIdValidator.required(), 
+        userId: userIdValidator.required(),
       },
     }),
-    async ({ send, input: { query: { userId } }, models: { UserModel } }) => {
+    async ({
+      send,
+      input: {
+        query: { userId },
+      },
+      models: { UserModel },
+    }) => {
       await UserModel.query().deleteById(userId)
       send({ message: "User deleted successfully" })
     },
   ],
 
-PUT: [
-  validate({
-    query: {
-      userId: userIdValidator.required(),
+  PUT: [
+    validate({
+      query: {
+        userId: userIdValidator.required(),
+      },
+      body: {
+        email: emailValidator,
+        password: passwordValidator,
+      },
+    }),
+    async ({
+      send,
+      input: {
+        query: { userId },
+        body,
+      },
+      models: { UserModel },
+    }) => {
+      const updatedUser = await UserModel.query().patchAndFetchById(
+        userId,
+        body,
+      )
+      send(updatedUser)
     },
-    body: {
-      email: emailValidator,
-      password: passwordValidator, 
-    },
-  }),
-  async ({ send, input: { query: { userId }, body }, models: { UserModel } }) => {
-    const updatedUser = await UserModel.query().patchAndFetchById(userId, body)
-    send(updatedUser)
-  },
-],
-
+  ],
 })
-
 
 export default handle

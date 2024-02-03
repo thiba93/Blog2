@@ -43,6 +43,7 @@ const handle = mw({
       if (passwordHash !== user.passwordHash) {
         throw new HttpAuthenticationError()
       }
+      
       const jwt = jsonwebtoken.sign(
         {
           payload: {
