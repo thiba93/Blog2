@@ -5,10 +5,6 @@ export const up = async (db) => {
     table.integer("profileView").defaultTo(0)
   })
 }
-
-
-
-
 export const down = async (db) => {
   await db.schema.alterTable("users", (table) => {
     table.dropColumn("postCount")
