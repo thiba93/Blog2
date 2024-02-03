@@ -23,7 +23,10 @@ const DeletePage = ({ page }) => {
     },
   })
   const handleDelete = async (productId) => {
+    if (window.confirm.bind(window)("Are you sure you want to delete this user?")) {
     await deleteMutation.mutateAsync(productId)
+    window.location.reload()
+    }
   }
   const handleEdit = (productId) => {
     router.push(`/products/edit?productId=${productId}`)
@@ -43,7 +46,7 @@ const DeletePage = ({ page }) => {
 
         </div>
       ))}
-      <Pagination pathname="/products/editOrDelete" page={page} countPages={data.data.meta.count} />
+      <Pagination pathname="/products/list" page={page} countPages={data.data.meta.count} />
     </div>
   )
 }

@@ -54,6 +54,18 @@ const handle = mw({
       send(updatedUser)
     },
   ],
+  DELETE: [
+    validate({
+      query: {
+        userId: idValidator.required(),
+      },
+    }),
+    async ({ send, input: { query: { userId } }, models: { UserModel } }) => {
+      await UserModel.query().deleteById(userId)
+      send({ success: true, message: "User deleted successfully" })
+    },
+  ],
+  
 })
 
 export default handle

@@ -14,8 +14,8 @@ const MainMenu = ({ children: _, ...otherProps }) => {
           </Link>
         </li>
         <li>
-          <Link href="/products/editOrDelete" styless>
-            product delete
+          <Link href="/products/list" styless>
+            Products
           </Link>
         </li>
         <li>
