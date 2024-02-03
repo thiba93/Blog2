@@ -18,6 +18,6 @@ export const passwordValidator = string()
   )
 
 export const userIdValidator = number()
-  .required('User ID is required')
-  .positive('User ID must be a positive number')
-  .integer('User ID must be an integer');
+  .required("User ID is required")
+  .positive("User ID must be a positive number")
+  .integer("User ID must be an integer")

@@ -25,7 +25,7 @@ const handle = mw({
       models: { UserModel },
     }) => {
       const query = UserModel.query()
-      const users = await query.page(page)
+      const users = await query.clone().page(page)
       const [{ count }] = await query.clone().count()
 
       send(users, { count })
@@ -81,32 +81,6 @@ const handle = mw({
     }) => {
       await UserModel.query().deleteById(userId)
       send({ message: "User deleted successfully" })
-    },
-  ],
-
-  PUT: [
-    validate({
-      query: {
-        userId: userIdValidator.required(),
-      },
-      body: {
-        email: emailValidator,
-        password: passwordValidator,
-      },
-    }),
-    async ({
-      send,
-      input: {
-        query: { userId },
-        body,
-      },
-      models: { UserModel },
-    }) => {
-      const updatedUser = await UserModel.query().patchAndFetchById(
-        userId,
-        body,
-      )
-      send(updatedUser)
     },
   ],
 })
