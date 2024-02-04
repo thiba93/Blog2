@@ -1,8 +1,18 @@
 import { useQuery } from "@tanstack/react-query"
 import axios from "axios"
 import { useRouter } from "next/router"
+import { useEffect } from "react"
+import { useSession } from "@/web/components/SessionContext"
 
 const UserPage = () => {
+  const { session } = useSession()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!session) {
+      router.push("/")
+    }
+  }, [router, session])
   const {
     query: { userId },
   } = useRouter()

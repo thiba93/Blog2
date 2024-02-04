@@ -7,9 +7,17 @@ import FormField from "@/web/components/ui/FormField"
 import SubmitButton from "@/web/components/ui/SubmitButton"
 import { useRouter } from "next/router"
 import axios from "axios"
+import { useSession } from "@/web/components/SessionContext"
 
 const EditUser = () => {
+  const { session } = useSession()
   const router = useRouter()
+
+  useEffect(() => {
+    if (!session) {
+      router.push("/")
+    }
+  }, [router, session])
   const { userId } = router.query
   const [initialValues, setInitialValues] = useState({
     email: "",

@@ -41,7 +41,7 @@ const ProductPage = () => {
   return (
     <article>
       <h1 className="text-2xl">
-        {product.result[0].name} (#{productId} {product.result[0].categoryId})
+        {product.result[0].name} (#{productId})
       </h1>
       <p>{product.result[0].description}</p>
     </article>

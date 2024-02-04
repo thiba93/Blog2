@@ -6,8 +6,9 @@ import { createResource } from "@/web/services/apiClient"
 import { useMutation } from "@tanstack/react-query"
 import { Formik } from "formik"
 import { useRouter } from "next/router"
-import { useCallback } from "react"
+import { useCallback,useEffect } from "react"
 import { object } from "yup"
+import { useSession } from "@/web/components/SessionContext"
 
 const validationSchema = object({
   name: nameValidator.required().label("Product name"),
@@ -19,10 +20,15 @@ const initialValues = {
   categoryId: 1,
 }
 const CreatePage = () => {
+  const { session } = useSession()
   const router = useRouter()
   const { mutateAsync: saveProduct } = useMutation({
     mutationFn: (product) => createResource("products", product),
   })
+  useEffect(() => {
+    if (!session) {
+      router.push("/")}
+    }, [router, session])
   const handleSubmit = useCallback(
     async ({ name, description, categoryId }) => {
       // eslint-disable-next-line no-unused-vars

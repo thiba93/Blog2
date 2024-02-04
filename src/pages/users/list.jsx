@@ -1,9 +1,11 @@
 import UserComponent from "@/web/components/UserComponent"
+import Button from "@/web/components/ui/Button"
 import Pagination from "@/web/components/ui/Pagination"
 import config from "@/web/config"
 import { readResource, deleteResource } from "@/web/services/apiClient"
 import { useQuery } from "@tanstack/react-query"
 import Link from "next/link"
+import { useRouter } from "next/router"
 
 export const getServerSideProps = ({ query: { page } }) => ({
   props: {
@@ -11,6 +13,7 @@ export const getServerSideProps = ({ query: { page } }) => ({
   },
 })
 const UsersPage = ({ page }) => {
+  const router = useRouter()
   const {
     isLoading,
     data: { data: { result: users, meta: { count } = {} } = {} } = {},
@@ -27,9 +30,11 @@ const UsersPage = ({ page }) => {
   const handleDelete = async (userId) => {
     if (window.confirm.bind("Are you sure you want to delete this user?")) {
       await deleteResource(["users", userId])
-      // Refresh the list or handle the UI update accordingly
       window.location.reload()
     }
+  }
+  const handleEdit = (userId) => {
+    router.push(`/users/edit?userId=${userId}`)
   }
 
   return (
@@ -41,10 +46,8 @@ const UsersPage = ({ page }) => {
                 <UserComponent {...user} />
             </Link>
             <div>
-              <Link href={`/users/edit?userId=${user.id}`} passHref>
-                <button>Edit</button>
-              </Link>
-              <button onClick={() => handleDelete(user.id)}>Delete</button>
+            <Button onClick={() => handleEdit(user.id)}>Edit</Button>
+              <Button variant="delete" onClick={() => handleDelete(user.id)}>Delete</Button>
             </div>
           </li>
         ))}

@@ -9,8 +9,10 @@ import Button from "@/web/components/ui/Button"
 import Form from "@/web/components/ui/Form"
 import FormField from "@/web/components/ui/FormField"
 import { updateResource, readResource } from "@/web/services/apiClient"
+import { useSession } from "@/web/components/SessionContext"
 
 const EditPage = () => {
+  const { session } = useSession()
   const router = useRouter()
   const { productId } = router.query
   const [initialValues, setInitialValues] = useState({
@@ -23,6 +25,11 @@ const EditPage = () => {
     queryFn: () => readResource(`products/${productId}`),
     enabled: Boolean(productId),
   })
+
+  useEffect(() => {
+    if (!session) {
+      router.push("/")}
+    }, [router, session])
 
   useEffect(() => {
     if (productData) {

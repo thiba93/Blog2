@@ -1,36 +1,42 @@
-import React from 'react';
-import { Formik, Form } from 'formik';
-import * as Yup from 'yup';
-import FormField from '@/web/components/ui/FormField';
-import SubmitButton from '@/web/components/ui/SubmitButton';
-import { createResource } from '@/web/services/apiClient';
+import React, { useEffect } from "react"
+import { Formik, Form } from "formik"
+import * as Yup from "yup"
+import FormField from "@/web/components/ui/FormField"
+import SubmitButton from "@/web/components/ui/SubmitButton"
+import { createResource } from "@/web/services/apiClient"
+import { useSession } from "@/web/components/SessionContext"
+import useRouter from "next/router"
 
 const CreateUser = () => {
+  const { session } = useSession()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!session) {
+      router.push("/")
+    }
+  }, [router, session])
   const initialValues = {
-    email: '',
-    password: '',
-    // Ajoutez d'autres champs si nécessaire
-  };
-
+    email: "",
+    password: "",
+  }
   const validationSchema = Yup.object({
-    email: Yup.string().email('Invalid email address').required('Required'),
-    password: Yup.string().required('Required'),
-    // Validez d'autres champs si nécessaire
-  });
+    email: Yup.string().email("Invalid email address").required("Required"),
+    password: Yup.string().required("Required"),
 
+  })
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      await createResource('users', values);
-      // Gérez la redirection ou l'affichage de succès ici
+      await createResource("users", values)
     } catch (error) {
       // Gérez les erreurs ici
     }
-    setSubmitting(false);
-  };
+
+    setSubmitting(false)
+  }
 
   return (
     <div>
-      <h1>Create User</h1>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -46,7 +52,7 @@ const CreateUser = () => {
         )}
       </Formik>
     </div>
-  );
-};
+  )
+}
 
-export default CreateUser;
+export default CreateUser

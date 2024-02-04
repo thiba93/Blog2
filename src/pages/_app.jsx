@@ -13,7 +13,7 @@ const App = ({ Component: Page, pageProps }) => (
           <div className="max-w-3xl mx-auto flex items-center p-4">
             <h1 className="text-2xl">
               <Link href="/" styless>
-                BEST WEBSITE E.V.E.R
+                Post-it
               </Link>
             </h1>
             <MainMenu className="ms-auto" />

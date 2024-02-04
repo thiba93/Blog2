@@ -1,7 +1,7 @@
 import Link from "@/web/components/ui/Link"
 
 const ProductHeadline = ({ id, name, description }) => (
-  <article className="flex flex-col gap-4">
+  <article className="flex flex-col gap-1">
     <h1 className="text-2xl">
       <Link href={`/products/${id}`}>{name}</Link>
     </h1>

@@ -6,6 +6,8 @@ export const descriptionValidator = string().min(20)
 
 export const idValidator = number().min(1)
 
+export const commentValidator = string().min(3).max(500)  
+
 export const pageValidator = number().min(1).default(1).required()
 
 export const emailValidator = string().email()

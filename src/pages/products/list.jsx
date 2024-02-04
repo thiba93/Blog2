@@ -3,6 +3,10 @@ import Pagination from "@/web/components/ui/Pagination"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { readResource, deleteResource } from "@/web/services/apiClient"
 import { useRouter } from "next/router"
+import Button from "@/web/components/ui/Button"
+import { useSession } from "@/web/components/SessionContext"
+import { useEffect } from "react"
+
 
 export const getServerSideProps = ({ query: { page } }) => ({
   props: {
@@ -10,12 +14,18 @@ export const getServerSideProps = ({ query: { page } }) => ({
   },
 })
 const DeletePage = ({ page }) => {
+  const { session } = useSession()
   const router = useRouter()
   const queryClient = useQueryClient()
   const { data, isLoading } = useQuery({
     queryKey: ["products", page],
     queryFn: () => readResource("products", { params: { page } }),
   })
+
+  useEffect(() => {
+    if (!session) {
+      router.push("/")}
+    }, [router, session])
   const deleteMutation = useMutation({
     mutationFn: (productId) => deleteResource(`products/${productId}`),
     onSuccess: () => {
@@ -23,9 +33,9 @@ const DeletePage = ({ page }) => {
     },
   })
   const handleDelete = async (productId) => {
-    if (window.confirm.bind(window)("Are you sure you want to delete this user?")) {
-    await deleteMutation.mutateAsync(productId)
-    window.location.reload()
+    if (window.confirm.bind("Are you sure you want to delete this user?")) {
+      await deleteMutation.mutateAsync(productId)
+      window.location.reload()
     }
   }
   const handleEdit = (productId) => {
@@ -37,16 +47,19 @@ const DeletePage = ({ page }) => {
   }
 
   return (
-    <div>
+    <div className="py-1 flex flex-col gap-4">
       {data.data.result.map((product) => (
         <div key={product.id}>
           <ProductHeadline {...product} />
-          <button onClick={() => handleDelete(product.id)}>Delete</button>
-          <button onClick={() => handleEdit(product.id)}>Edit</button>
-
+          <Button onClick={() => handleEdit(product.id)}>Edit</Button>
+          <Button variant="delete" onClick={() => handleDelete(product.id)}>Delete</Button>
         </div>
       ))}
-      <Pagination pathname="/products/list" page={page} countPages={data.data.meta.count} />
+      <Pagination 
+        pathname="/products/list"
+        page={page}
+        countPages={data.data.meta.count}
+      />
     </div>
   )
 }
