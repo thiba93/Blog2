@@ -34,29 +34,28 @@ const SignUpPage = () => {
 
   return (
     <Formik
-    initialValues={initialValues}
-    validationSchema={validationSchema}
-    onSubmit={handleSubmit}
-  >
-    <Form className="bg-white p-4 rounded shadow-md space-y-4">
-      <FormField
-        name="email"
-        type="email"
-        placeholder="Enter your e-mail"
-        label="E-mail"
-      />
-      <FormField
-        name="password"
-        type="password"
-        placeholder="Enter your password"
-        label="Password"
-      />
-      <SubmitButton className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
-        Sign Up
-      </SubmitButton>
-    </Form>
-  </Formik>
-  
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+    >
+      <Form className="bg-white p-4 rounded shadow-md space-y-4">
+        <FormField
+          name="email"
+          type="email"
+          placeholder="Enter your e-mail"
+          label="E-mail"
+        />
+        <FormField
+          name="password"
+          type="password"
+          placeholder="Enter your password"
+          label="Password"
+        />
+        <SubmitButton className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+          Sign Up
+        </SubmitButton>
+      </Form>
+    </Formik>
   )
 }
 

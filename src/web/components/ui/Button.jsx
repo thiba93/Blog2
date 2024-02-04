@@ -16,7 +16,8 @@ const Button = (props) => {
     className,
     ...otherProps
   } = props
-  const deleteButtonClass = variant === "delete" ? "bg-red-600 active:bg-red-700 text-white" : ""
+  const deleteButtonClass =
+    variant === "delete" ? "bg-red-600 active:bg-red-700 text-white" : ""
 
   return (
     <Component
@@ -25,7 +26,7 @@ const Button = (props) => {
         variants[variant],
         sizes[size],
         className,
-        deleteButtonClass
+        deleteButtonClass,
       )}
       {...otherProps}
     />

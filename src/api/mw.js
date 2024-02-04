@@ -29,8 +29,6 @@ const handleError = (err, { res }) => {
       .status(HTTP_ERRORS.INTERNAL_SERVER_ERROR)
       .send({ error: "Something went wrong." })
 
-
-
     return
   }
 

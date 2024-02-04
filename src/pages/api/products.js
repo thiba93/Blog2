@@ -60,14 +60,14 @@ const handle = mw({
       },
     }),
     async ({ send, input: { body, params }, models: { ProductModel } }) => {
-      const updatedProduct = await ProductModel.query()
-        .patchAndFetchById(params.productId, body)
-  
+      const updatedProduct = await ProductModel.query().patchAndFetchById(
+        params.productId,
+        body,
+      )
+
       send(updatedProduct)
     },
   ],
-})  
-
-
+})
 
 export default handle

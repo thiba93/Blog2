@@ -3,7 +3,7 @@ import ProductModel from "@/db/models/ProductModel"
 import UserModel from "@/db/models/UserModel"
 
 class CommentModel extends BaseModel {
-  static tableName = "comments";
+  static tableName = "comments"
   static get relationMappings() {
     return {
       product: {

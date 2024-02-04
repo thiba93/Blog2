@@ -1,8 +1,6 @@
 import validate from "@/api/middlewares/validate"
 import mw from "@/api/mw"
-import {
-  idValidator,
-} from "@/utils/validators"
+import { idValidator } from "@/utils/validators"
 
 const handle = mw({
   GET: [
@@ -29,12 +27,17 @@ const handle = mw({
         userId: idValidator.required(),
       },
     }),
-    async ({ send, input: { query: { userId } }, models: { UserModel } }) => {
+    async ({
+      send,
+      input: {
+        query: { userId },
+      },
+      models: { UserModel },
+    }) => {
       await UserModel.query().deleteById(userId)
       send({ success: true, message: "User deleted successfully" })
     },
   ],
-  
 })
 
 export default handle

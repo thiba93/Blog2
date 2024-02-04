@@ -6,4 +6,3 @@ const UserComponent = ({ name, email }) => (
 )
 
 export default UserComponent
-  

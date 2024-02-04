@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 /* eslint-disable no-console */
 import { useEffect, useState } from "react"
 import { useSession } from "@/web/components/SessionContext"
@@ -31,7 +32,7 @@ const YourProfilePage = () => {
 
         setLoading(false)
       }
-  }
+    }
     fetchUser()
   }, [router, session])
 
@@ -45,18 +46,32 @@ const YourProfilePage = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 py-10 flex flex-col items-center">
-    <div className="bg-white shadow-md rounded-lg p-8 max-w-md w-full">
-      <h1 className="text-2xl font-semibold text-gray-800 mb-6">Your Profile</h1>
-      <div className="space-y-4">
-        <p className="text-gray-600"><span className="font-medium">Id:</span> {user.id}</p>
-        <p className="text-gray-600"><span className="font-medium">Email:</span> {user.email}</p>
-        <p className="text-gray-600"><span className="font-medium">Number of comments:</span> {user.commentCount}</p>
-        <p className="text-gray-600"><span className="font-medium">Number of posts:</span> {user.postCount}</p>
-        <p className="text-gray-600"><span className="font-medium">Profile views:</span> {user.profileView}</p>
+      <div className="bg-white shadow-md rounded-lg p-8 max-w-md w-full">
+        <h1 className="text-2xl font-semibold text-gray-800 mb-6">
+          Your Profile
+        </h1>
+        <div className="space-y-4">
+          <p className="text-gray-600">
+            <span className="font-medium">Id:</span> {user.id}
+          </p>
+          <p className="text-gray-600">
+            <span className="font-medium">Email:</span> {user.email}
+          </p>
+          <p className="text-gray-600">
+            <span className="font-medium">Number of comments:</span>{" "}
+            {user.commentCount}
+          </p>
+          <p className="text-gray-600">
+            <span className="font-medium">Number of posts:</span>{" "}
+            {user.postCount}
+          </p>
+          <p className="text-gray-600">
+            <span className="font-medium">Profile views:</span>{" "}
+            {user.profileView}
+          </p>
+        </div>
       </div>
     </div>
-  </div>
-  
   )
 }
 
