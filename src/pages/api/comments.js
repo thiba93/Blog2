@@ -1,16 +1,22 @@
 import mw from "@/api/mw"
+import auth from "@/api/middlewares/auth"
 import validate from "@/api/middlewares/validate"
-import { textValidator, userIdValidator } from "@/utils/validators"
+import { textValidator } from "@/utils/validators"
 const handle = mw({
   POST: [
+    auth, 
     validate({
       body: {
-        text: textValidator.required(),
-        userId: userIdValidator.required(),
+        comment: textValidator.required(),
       },
     }),
-    async ({ send, input: { body }, models: { CommentModel } }) => {
-      const newComment = await CommentModel.query().insertAndFetch(body)
+    async ({ send, input: { body }, models: { CommentModel }, userId,productId}) => {
+      const newComment = await CommentModel.query().insertAndFetch({
+        ...body,
+        userId,
+        productId
+      })
+
       send(newComment)
     },
   ],
