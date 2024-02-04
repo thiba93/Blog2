@@ -7,6 +7,7 @@ import SubmitButton from "@/web/components/ui/SubmitButton"
 import { createResource } from "@/web/services/apiClient"
 import { useSession } from "@/web/components/SessionContext"
 import { useRouter } from "next/router"
+import axios from "axios"
 
 const CreateUser = () => {
   const { session } = useSession()
@@ -16,14 +17,13 @@ const CreateUser = () => {
     if (!session) {
       router.push("/")
     }
-    
-    const fetchConnectedUser = async () => {
-      const response = await fetch(`/api/users?id=${session?.user.id}`)
-      const data = await response.json()
 
+    const fetchConnectedUser = async () => {
+      const response = await axios.get(`/api/users/${session?.user.id}`)
+      
       if (
-        data.result[0].role === "user" ||
-        data.result[0].isEnabled === "disabled"
+        response.data.result[0].role === "user" ||
+        response.data.result[0].isEnabled === "disabled"
       ) {
         router.push("/")
       }

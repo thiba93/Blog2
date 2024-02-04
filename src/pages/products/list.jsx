@@ -6,6 +6,7 @@ import { useRouter } from "next/router"
 import Button from "@/web/components/ui/Button"
 import { useSession } from "@/web/components/SessionContext"
 import { useEffect } from "react"
+import axios from "axios"
 
 
 export const getServerSideProps = ({ query: { page } }) => ({
@@ -25,22 +26,22 @@ const DeletePage = ({ page }) => {
 
   useEffect(() => {
     if (!session) {
-      router.push("/")}
+      router.push("/")
+    }
 
-      const fetchConnectedUser = async () => {
-        const response = await fetch(`/api/users?id=${session?.user.id}`)
-        const dataUser = await response.json()
-  
-        if (
-          dataUser.result[0].role === "user" ||
-          dataUser.result[0].isEnabled === "disabled"
-        ) {
-          router.push("/")
-        }
+    const fetchConnectedUser = async () => {
+      const response = await axios.get(`/api/users/${session?.user.id}`)
+      
+      if (
+        response.data.result[0].role === "user" ||
+        response.data.result[0].isEnabled === "disabled"
+      ) {
+        router.push("/")
       }
-  
-      fetchConnectedUser()
-    }, [router, session])
+    }
+
+    fetchConnectedUser()
+  }, [router, session])
   const deleteMutation = useMutation({
     mutationFn: (productId) => deleteResource(`products/${productId}`),
     onSuccess: () => {

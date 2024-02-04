@@ -11,6 +11,7 @@ import Form from "@/web/components/ui/Form"
 import FormField from "@/web/components/ui/FormField"
 import { updateResource, readResource } from "@/web/services/apiClient"
 import { useSession } from "@/web/components/SessionContext"
+import axios from "axios"
 
 const EditPage = () => {
   const { session } = useSession()
@@ -32,21 +33,18 @@ const EditPage = () => {
       router.push("/")
     }
 
-    if (session) {
-      const fetchConnectedUser = async () => {
-        const response = await fetch(`/api/users?id=${session?.user.id}`)
-        const data = await response.json()
-
-        if (
-          data.result[0].role === "user" ||
-          data.result[0].isEnabled === "disabled"
-        ) {
-          router.push("/")
-        }
+    const fetchConnectedUser = async () => {
+      const response = await axios.get(`/api/users/${session?.user.id}`)
+      
+      if (
+        response.data.result[0].role === "user" ||
+        response.data.result[0].isEnabled === "disabled"
+      ) {
+        router.push("/")
       }
-
-      fetchConnectedUser()
     }
+
+    fetchConnectedUser()
   }, [router, session])
 
   useEffect(() => {

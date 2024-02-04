@@ -16,9 +16,7 @@ const YourProfilePage = () => {
 
     const fetchUser = async () => {
       const response = await fetch(`/api/users?id=${session?.user.id}`)
-      console.log(session.user.id)
       const data = await response.json()
-      console.log(data.result[0].id)
 
       if (data && data.result && data.result.length > 0) {
         const userWithMatchingId = data.result.find(

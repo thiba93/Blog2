@@ -9,6 +9,7 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import { useEffect } from "react"
 import { useSession } from "@/web/components/SessionContext"
+import axios from "axios"
 
 export const getServerSideProps = ({ query: { page } }) => ({
   props: {
@@ -23,14 +24,13 @@ const UsersPage = ({ page }) => {
     if (!session) {
       router.push("/")
     }
-    
-    const fetchConnectedUser = async () => {
-      const response = await fetch(`/api/users?id=${session?.user.id}`)
-      const data = await response.json()
 
+    const fetchConnectedUser = async () => {
+      const response = await axios.get(`/api/users/${session?.user.id}`)
+      
       if (
-        data.result[0].role === "user" ||
-        data.result[0].isEnabled === "disabled"
+        response.data.result[0].role === "user" ||
+        response.data.result[0].isEnabled === "disabled"
       ) {
         router.push("/")
       }
