@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import React, { useEffect } from "react"
 import { Formik, Form } from "formik"
 import * as Yup from "yup"
@@ -5,7 +6,7 @@ import FormField from "@/web/components/ui/FormField"
 import SubmitButton from "@/web/components/ui/SubmitButton"
 import { createResource } from "@/web/services/apiClient"
 import { useSession } from "@/web/components/SessionContext"
-import useRouter from "next/router"
+import { useRouter } from "next/router"
 
 const CreateUser = () => {
   const { session } = useSession()
@@ -15,6 +16,20 @@ const CreateUser = () => {
     if (!session) {
       router.push("/")
     }
+    
+    const fetchConnectedUser = async () => {
+      const response = await fetch(`/api/users?id=${session?.user.id}`)
+      const data = await response.json()
+
+      if (
+        data.result[0].role === "user" ||
+        data.result[0].isEnabled === "disabled"
+      ) {
+        router.push("/")
+      }
+    }
+
+    fetchConnectedUser()
   }, [router, session])
   const initialValues = {
     email: "",

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable max-lines-per-function */
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
@@ -29,6 +30,22 @@ const EditPage = () => {
   useEffect(() => {
     if (!session) {
       router.push("/")
+    }
+
+    if (session) {
+      const fetchConnectedUser = async () => {
+        const response = await fetch(`/api/users?id=${session?.user.id}`)
+        const data = await response.json()
+
+        if (
+          data.result[0].role === "user" ||
+          data.result[0].isEnabled === "disabled"
+        ) {
+          router.push("/")
+        }
+      }
+
+      fetchConnectedUser()
     }
   }, [router, session])
 

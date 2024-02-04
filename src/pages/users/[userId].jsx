@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import { useQuery } from "@tanstack/react-query"
 import axios from "axios"
 import { useRouter } from "next/router"
@@ -12,6 +13,20 @@ const UserPage = () => {
     if (!session) {
       router.push("/")
     }
+    
+    const fetchConnectedUser = async () => {
+      const response = await fetch(`/api/users?id=${session?.user.id}`)
+      const data = await response.json()
+
+      if (
+        data.result[0].role === "user" ||
+        data.result[0].isEnabled === "disabled"
+      ) {
+        router.push("/")
+      }
+    }
+
+    fetchConnectedUser()
   }, [router, session])
   const {
     query: { userId },

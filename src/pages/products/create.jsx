@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import { descriptionValidator, nameValidator } from "@/utils/validators"
 import Button from "@/web/components/ui/Button"
 import Form from "@/web/components/ui/Form"
@@ -29,6 +30,20 @@ const CreatePage = () => {
     if (!session) {
       router.push("/")
     }
+
+    const fetchConnectedUser = async () => {
+      const response = await fetch(`/api/users?id=${session?.user.id}`)
+      const data = await response.json()
+
+      if (
+        data.result[0].role === "user" ||
+        data.result[0].isEnabled === "disabled"
+      ) {
+        router.push("/")
+      }
+    }
+
+    fetchConnectedUser()
   }, [router, session])
   const handleSubmit = useCallback(
     async ({ name, description, categoryId }) => {

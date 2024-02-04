@@ -1,9 +1,31 @@
 /* eslint-disable max-lines-per-function */
 import { useSession } from "@/web/components/SessionContext"
 import Link from "@/web/components/ui/Link"
+import { useRouter } from "next/router"
+import { useEffect } from "react"
 
 const MainMenu = ({ children: _, ...otherProps }) => {
+  const router = useRouter()
   const { session, signOut } = useSession()
+  useEffect(() => {
+    if (!session) {
+      router.push("/")
+    }
+
+    const fetchConnectedUser = async () => {
+      const response = await fetch(`/api/users?id=${session?.user.id}`)
+      const data = await response.json()
+
+      if (
+        data.result[0].role === "user" ||
+        data.result[0].isEnabled === "disabled"
+      ) {
+        router.push("/")
+      }
+    }
+
+    fetchConnectedUser()
+  }, [router, session])
 
   return (
     <nav {...otherProps}>

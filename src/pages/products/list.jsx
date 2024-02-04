@@ -13,6 +13,7 @@ export const getServerSideProps = ({ query: { page } }) => ({
     page: parseInt(page, 10) || 1,
   },
 })
+// eslint-disable-next-line max-lines-per-function
 const DeletePage = ({ page }) => {
   const { session } = useSession()
   const router = useRouter()
@@ -25,6 +26,20 @@ const DeletePage = ({ page }) => {
   useEffect(() => {
     if (!session) {
       router.push("/")}
+
+      const fetchConnectedUser = async () => {
+        const response = await fetch(`/api/users?id=${session?.user.id}`)
+        const dataUser = await response.json()
+  
+        if (
+          dataUser.result[0].role === "user" ||
+          dataUser.result[0].isEnabled === "disabled"
+        ) {
+          router.push("/")
+        }
+      }
+  
+      fetchConnectedUser()
     }, [router, session])
   const deleteMutation = useMutation({
     mutationFn: (productId) => deleteResource(`products/${productId}`),

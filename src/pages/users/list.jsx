@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import UserComponent from "@/web/components/UserComponent"
 import Button from "@/web/components/ui/Button"
 import Pagination from "@/web/components/ui/Pagination"
@@ -6,6 +7,8 @@ import { readResource, deleteResource } from "@/web/services/apiClient"
 import { useQuery } from "@tanstack/react-query"
 import Link from "next/link"
 import { useRouter } from "next/router"
+import { useEffect } from "react"
+import { useSession } from "@/web/components/SessionContext"
 
 export const getServerSideProps = ({ query: { page } }) => ({
   props: {
@@ -14,6 +17,27 @@ export const getServerSideProps = ({ query: { page } }) => ({
 })
 const UsersPage = ({ page }) => {
   const router = useRouter()
+  const { session } = useSession()
+
+  useEffect(() => {
+    if (!session) {
+      router.push("/")
+    }
+    
+    const fetchConnectedUser = async () => {
+      const response = await fetch(`/api/users?id=${session?.user.id}`)
+      const data = await response.json()
+
+      if (
+        data.result[0].role === "user" ||
+        data.result[0].isEnabled === "disabled"
+      ) {
+        router.push("/")
+      }
+    }
+
+    fetchConnectedUser()
+  }, [router, session])
   const {
     isLoading,
     data: { data: { result: users, meta: { count } = {} } = {} } = {},

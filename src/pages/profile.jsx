@@ -15,23 +15,25 @@ const YourProfilePage = () => {
     }
 
     const fetchUser = async () => {
-      try {
-        const response = await fetch(`/api/users?id=${session.user.id}`)
-        const data = await response.json()
+      const response = await fetch(`/api/users?id=${session?.user.id}`)
+      console.log(session.user.id)
+      const data = await response.json()
+      console.log(data.result[0].id)
 
+      if (data && data.result && data.result.length > 0) {
+        const userWithMatchingId = data.result.find(
+          (userItem) => userItem.id === session.user.id,
+        )
 
-        if (data.result) {
-          setUser(data.result[0])
+        if (userWithMatchingId) {
+          setUser(userWithMatchingId)
         } else {
-          console.error("No user in the database")
+          console.error("User not found")
         }
-      } catch (error) {
-        console.error("Error fetching user data", error)
-      } finally {
+
         setLoading(false)
       }
-    }
-
+  }
     fetchUser()
   }, [router, session])
 
@@ -48,6 +50,7 @@ const YourProfilePage = () => {
       <h1>Your Profile</h1>
       <p>Id: {user.id}</p>
       <p>Email: {user.email}</p>
+
     </div>
   )
 }

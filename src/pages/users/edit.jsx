@@ -17,6 +17,20 @@ const EditUser = () => {
     if (!session) {
       router.push("/")
     }
+
+    const fetchConnectedUser = async () => {
+      const response = await fetch(`/api/users?id=${session?.user.id}`)
+      const data = await response.json()
+
+      if (
+        data.result[0].role === "user" ||
+        data.result[0].isEnabled === "disabled"
+      ) {
+        router.push("/")
+      }
+    }
+
+    fetchConnectedUser()
   }, [router, session])
   const { userId } = router.query
   const [initialValues, setInitialValues] = useState({
