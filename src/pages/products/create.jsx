@@ -25,7 +25,7 @@ const initialValues = {
 const CreatePage = () => {
   const { session } = useSession()
   const router = useRouter()
-  const [ setUser] = useState(null)
+  const [setUser] = useState(null)
   const [setError] = useState("")
 
   useEffect(() => {
@@ -52,7 +52,7 @@ const CreatePage = () => {
       }
     }
     fetchConnectedUser()
-  }, [session.user.id])
+  }, [session.user.id, setError, setUser]) 
 
   const { mutateAsync: saveProduct } = useMutation({
     mutationFn: (product) => createResource("products", product),
