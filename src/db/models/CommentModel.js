@@ -1,24 +1,24 @@
 import BaseModel from "@/db/models/BaseModel"
-import CategoryModel from "@/db/models/CategoryModel"
+import ProductModel from "@/db/models/ProductModel"
 import UserModel from "@/db/models/UserModel"
 
-class ProductModel extends BaseModel {
-  static tableName = "products"
+class CommentModel extends BaseModel {
+  static tableName = "comments";
   static get relationMappings() {
     return {
-      category: {
+      product: {
         relation: BaseModel.BelongsToOneRelation,
-        modelClass: CategoryModel,
+        modelClass: ProductModel,
         join: {
-          from: "products.categoryId",
-          to: "categories.id",
+          from: "comments.productId",
+          to: "products.id",
         },
       },
       user: {
         relation: BaseModel.BelongsToOneRelation,
         modelClass: UserModel,
         join: {
-          from: "products.userId",
+          from: "comments.userId",
           to: "users.id",
         },
       },
@@ -26,4 +26,4 @@ class ProductModel extends BaseModel {
   }
 }
 
-export default ProductModel
+export default CommentModel
