@@ -1,4 +1,7 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-shadow */
 /* eslint-disable max-lines-per-function */
+/* eslint-disable no-console */
 import { descriptionValidator, nameValidator } from "@/utils/validators"
 import Button from "@/web/components/ui/Button"
 import Form from "@/web/components/ui/Form"
@@ -7,10 +10,9 @@ import { createResource } from "@/web/services/apiClient"
 import { useMutation } from "@tanstack/react-query"
 import { Formik } from "formik"
 import { useRouter } from "next/router"
-import { useCallback, useEffect } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { object } from "yup"
 import { useSession } from "@/web/components/SessionContext"
-import axios from "axios"
 
 const validationSchema = object({
   name: nameValidator.required().label("Product name"),
@@ -20,41 +22,52 @@ const initialValues = {
   name: "",
   description: "",
   categoryId: 1,
+  userId: "",
 }
 const CreatePage = () => {
   const { session } = useSession()
   const router = useRouter()
+  const [user, setUser] = useState(null)
+  useEffect(() => {
+    const fetchConnectedUser = async () => {
+      try {
+        const response = await fetch(`/api/users?id=${session.user.id}`)
+        const data = await response.json()
+
+        if (data && data.result && data.result.length > 0) {
+          const userWithMatchingId = data.result.find(
+            (user) => user.id === session.user.id,
+          )
+
+          if (userWithMatchingId) {
+            setUser(userWithMatchingId)
+          } else {
+            console.error("User not found")
+          }
+        } else {
+          console.error("No user in the database")
+        }
+      } catch (error) {
+        console.error("Error fetching user data", error)
+      }
+    }
+    fetchConnectedUser()
+  }, [])
+
   const { mutateAsync: saveProduct } = useMutation({
     mutationFn: (product) => createResource("products", product),
   })
-  useEffect(() => {
-    if (!session) {
-      router.push("/")
-    }
-
-    const fetchConnectedUser = async () => {
-      const response = await axios.get(`/api/users/${session?.user.id}`)
-
-      if (
-        response.data.result[0].isEnabled === "disabled"
-      ) {
-        router.push("/")
-      }
-    }
-
-    fetchConnectedUser()
-  }, [router, session])
   const handleSubmit = useCallback(
     async ({ name, description, categoryId }) => {
-      // eslint-disable-next-line no-unused-vars
       const { data: product } = await saveProduct({
         name,
         description,
         categoryId,
+        userId: session.user.id,
       })
+      const productId = product.result[0].id
 
-      // eslint-disable-next-line capitalized-comments
-      // router.push(`/products/${product.id}`)
+      router.push(`/products/${productId}`)
     },
     [saveProduct, router],
   )
