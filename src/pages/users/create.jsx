@@ -20,7 +20,7 @@ const CreateUser = () => {
 
     const fetchConnectedUser = async () => {
       const response = await axios.get(`/api/users/${session?.user.id}`)
-      
+
       if (
         response.data.result[0].role === "user" ||
         response.data.result[0].isEnabled === "disabled"
@@ -38,7 +38,6 @@ const CreateUser = () => {
   const validationSchema = Yup.object({
     email: Yup.string().email("Invalid email address").required("Required"),
     password: Yup.string().required("Required"),
-
   })
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
@@ -51,21 +50,28 @@ const CreateUser = () => {
   }
 
   return (
-    <div>
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={handleSubmit}
-      >
-        {({ isSubmitting }) => (
-          <Form>
-            <FormField name="email" type="email" label="Email" />
-            <FormField name="password" type="password" label="Password" />
-            {/* Ajoutez d'autres champs de formulaire ici si nécessaire */}
-            <SubmitButton disabled={isSubmitting}>Create User</SubmitButton>
-          </Form>
-        )}
-      </Formik>
+    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          Create User
+        </h2>
+        <div className="mt-8 bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+          >
+            {({ isSubmitting }) => (
+              <Form className="space-y-6">
+                <FormField name="email" type="email" label="Email" />
+                <FormField name="password" type="password" label="Password" />
+                {/* Ajoutez d'autres champs de formulaire ici si nécessaire */}
+                <SubmitButton disabled={isSubmitting}>Create User</SubmitButton>
+              </Form>
+            )}
+          </Formik>
+        </div>
+      </div>
     </div>
   )
 }

@@ -18,7 +18,7 @@ const MainMenu = ({ children: _, ...otherProps }) => {
           <>
             <li>
               <Link href="/products/list" styless>
-                Products
+                Posts
               </Link>
             </li>
             <li>
@@ -28,7 +28,7 @@ const MainMenu = ({ children: _, ...otherProps }) => {
             </li>
             <li>
               <Link href="/products/create" styless>
-                Create product
+                Create post
               </Link>
             </li>
             <li>

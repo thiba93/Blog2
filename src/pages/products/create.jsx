@@ -34,9 +34,8 @@ const CreatePage = () => {
 
     const fetchConnectedUser = async () => {
       const response = await axios.get(`/api/users/${session?.user.id}`)
-      
+
       if (
-        response.data.result[0].role === "user" ||
         response.data.result[0].isEnabled === "disabled"
       ) {
         router.push("/")
@@ -61,25 +60,42 @@ const CreatePage = () => {
   )
 
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      onSubmit={handleSubmit}
-    >
-      <Form>
-        <FormField
-          name="name"
-          label="Product name"
-          placeholder="Enter a product name"
-        />
-        <FormField
-          name="description"
-          label="Product description"
-          placeholder="Enter a product description"
-        />
-        <Button type="submit">Submit</Button>
-      </Form>
-    </Formik>
+    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          Create Product
+        </h2>
+        <div className="mt-8 bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+          >
+            {({ isSubmitting }) => (
+              <Form className="space-y-6">
+                <FormField
+                  name="name"
+                  label="Post name"
+                  placeholder="Enter a post name"
+                />
+                <FormField
+                  name="description"
+                  label="Post description"
+                  placeholder="Enter a post description"
+                />
+                <Button
+                  type="submit"
+                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline-blue active:bg-blue-800"
+                  disabled={isSubmitting}
+                >
+                  Create Post
+                </Button>
+              </Form>
+            )}
+          </Formik>
+        </div>
+      </div>
+    </div>
   )
 }
 
