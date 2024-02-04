@@ -16,7 +16,7 @@ const UserPage = () => {
 
     const fetchConnectedUser = async () => {
       const response = await axios.get(`/api/users/${session?.user.id}`)
-      
+
       if (
         response.data.result[0].role === "user" ||
         response.data.result[0].isEnabled === "disabled"
@@ -63,12 +63,11 @@ const UserPage = () => {
   }
 
   return (
-    <article>
-      <h1 className="text-2xl">
+    <article className="bg-white p-4 rounded shadow-md">
+      <h1 className="text-2xl font-bold mb-2">
         {user.result[0].name} (#{userId})
       </h1>
-      <p>{user.result[0].email}</p>
-      {/* Add more user details here */}
+      <p className="text-gray-600">{user.result[0].email}</p>
     </article>
   )
 }

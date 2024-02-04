@@ -27,14 +27,24 @@ const IndexPage = (props) => {
 
   return (
     <div className="py-4 flex flex-col gap-16">
-      <ul className="flex flex-col gap-8">
+      <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {products.map(({ id, name, description }) => (
-          <li key={id}>
-            <ProductHeadline id={id} name={name} description={description} />
+          <li key={id} className="bg-white p-4 rounded shadow-md">
+            <ProductHeadline
+              id={id}
+              name={name}
+              description={description}
+              className="text-2xl font-bold"
+            />
           </li>
         ))}
       </ul>
-      <Pagination pathname="/" page={page} countPages={countPages} />
+      <Pagination
+        pathname="/"
+        page={page}
+        countPages={countPages}
+        className="mt-4"
+      />
     </div>
   )
 }

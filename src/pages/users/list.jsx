@@ -27,7 +27,7 @@ const UsersPage = ({ page }) => {
 
     const fetchConnectedUser = async () => {
       const response = await axios.get(`/api/users/${session?.user.id}`)
-      
+
       if (
         response.data.result[0].role === "user" ||
         response.data.result[0].isEnabled === "disabled"
@@ -65,18 +65,37 @@ const UsersPage = ({ page }) => {
     <div className="py-4 flex flex-col gap-16">
       <ul className="flex flex-col gap-8">
         {users.map((user) => (
-          <li key={user.id} className="flex justify-between items-center">
-            <Link href={`/users/${user.id}`}>
-                <UserComponent {...user} />
+          <li
+            key={user.id}
+            className="flex justify-between items-center bg-white p-4 rounded shadow-md"
+          >
+            <Link href={`/users/${user.id}`} className="text-xl font-bold">
+              <UserComponent {...user} />
             </Link>
-            <div>
-            <Button onClick={() => handleEdit(user.id)}>Edit</Button>
-              <Button variant="delete" onClick={() => handleDelete(user.id)}>Delete</Button>
+            <div className="flex gap-2">
+              <Button
+                onClick={() => handleEdit(user.id)}
+                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+              >
+                Edit
+              </Button>
+              <Button
+                variant="delete"
+                onClick={() => handleDelete(user.id)}
+                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+              >
+                Delete
+              </Button>
             </div>
           </li>
         ))}
       </ul>
-      <Pagination pathname="/users/list" page={page} countPages={countPages} />
+      <Pagination
+        pathname="/users/list"
+        page={page}
+        countPages={countPages}
+        className="mt-4"
+      />
     </div>
   )
 }

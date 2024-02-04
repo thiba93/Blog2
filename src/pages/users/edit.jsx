@@ -20,7 +20,7 @@ const EditUser = () => {
 
     const fetchConnectedUser = async () => {
       const response = await axios.get(`/api/users/${session?.user.id}`)
-      
+
       if (
         response.data.result[0].role === "user" ||
         response.data.result[0].isEnabled === "disabled"
@@ -72,8 +72,8 @@ const EditUser = () => {
   }
 
   return (
-    <div>
-      <h1>Edit User</h1>
+    <div className="bg-white p-4 rounded shadow-md">
+      <h1 className="text-2xl font-bold mb-4">Edit User</h1>
       <Formik
         enableReinitialize
         initialValues={initialValues}
@@ -81,10 +81,15 @@ const EditUser = () => {
         onSubmit={handleSubmit}
       >
         {({ isSubmitting }) => (
-          <Form>
+          <Form className="space-y-4">
             <FormField name="email" type="email" label="Email" />
             <FormField name="password" type="password" label="Password" />
-            <SubmitButton disabled={isSubmitting}>Update User</SubmitButton>
+            <SubmitButton
+              disabled={isSubmitting}
+              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+            >
+              Update User
+            </SubmitButton>
           </Form>
         )}
       </Formik>

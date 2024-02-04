@@ -8,7 +8,6 @@ import { useSession } from "@/web/components/SessionContext"
 import { useEffect } from "react"
 import axios from "axios"
 
-
 export const getServerSideProps = ({ query: { page } }) => ({
   props: {
     page: parseInt(page, 10) || 1,
@@ -31,7 +30,7 @@ const DeletePage = ({ page }) => {
 
     const fetchConnectedUser = async () => {
       const response = await axios.get(`/api/users/${session?.user.id}`)
-      
+
       if (
         response.data.result[0].role === "user" ||
         response.data.result[0].isEnabled === "disabled"
@@ -63,21 +62,34 @@ const DeletePage = ({ page }) => {
   }
 
   return (
-    <div className="py-1 flex flex-col gap-4">
+    <div className="py-4 flex flex-col gap-4">
       {data.data.result.map((product) => (
-        <div key={product.id}>
-          <ProductHeadline {...product} />
-          <Button onClick={() => handleEdit(product.id)}>Edit</Button>
-          <Button variant="delete" onClick={() => handleDelete(product.id)}>Delete</Button>
+        <div key={product.id} className="bg-white p-4 rounded shadow-md">
+          <ProductHeadline {...product} className="text-2xl font-bold" />
+          <div className="flex gap-2">
+            <Button
+              onClick={() => handleEdit(product.id)}
+              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+            >
+              Edit
+            </Button>
+            <Button
+              variant="delete"
+              onClick={() => handleDelete(product.id)}
+              className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+            >
+              Delete
+            </Button>
+          </div>
         </div>
       ))}
-      <Pagination 
+      <Pagination
         pathname="/products/list"
         page={page}
         countPages={data.data.meta.count}
+        className="mt-4"
       />
     </div>
   )
 }
-
 export default DeletePage

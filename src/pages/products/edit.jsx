@@ -35,7 +35,7 @@ const EditPage = () => {
 
     const fetchConnectedUser = async () => {
       const response = await axios.get(`/api/users/${session?.user.id}`)
-      
+
       if (
         response.data.result[0].role === "user" ||
         response.data.result[0].isEnabled === "disabled"
@@ -83,7 +83,7 @@ const EditPage = () => {
       onSubmit={handleSubmit}
       enableReinitialize
     >
-      <Form>
+      <Form className="bg-white p-4 rounded shadow-md space-y-4">
         <FormField
           name="name"
           label="Product name"
@@ -94,7 +94,12 @@ const EditPage = () => {
           label="Product description"
           placeholder="Enter a product description"
         />
-        <Button type="submit">Update</Button>
+        <Button
+          type="submit"
+          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+        >
+          Update
+        </Button>
       </Form>
     </Formik>
   )

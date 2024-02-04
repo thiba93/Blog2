@@ -38,13 +38,13 @@ const SignInPage = () => {
 
   return (
     <>
-      <ResponseError error={error} />
+      <ResponseError error={error} className="mb-4" />
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        <Form>
+        <Form className="bg-white p-4 rounded shadow-md space-y-4">
           <FormField
             name="email"
             type="email"
@@ -57,7 +57,9 @@ const SignInPage = () => {
             placeholder="Enter your password"
             label="Password"
           />
-          <SubmitButton>Sign In</SubmitButton>
+          <SubmitButton className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+            Sign In
+          </SubmitButton>
         </Form>
       </Formik>
     </>
