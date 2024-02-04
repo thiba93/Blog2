@@ -6,7 +6,7 @@ import { createResource } from "@/web/services/apiClient"
 import { useMutation } from "@tanstack/react-query"
 import { Formik } from "formik"
 import { useRouter } from "next/router"
-import { useCallback,useEffect } from "react"
+import { useCallback, useEffect } from "react"
 import { object } from "yup"
 import { useSession } from "@/web/components/SessionContext"
 
@@ -27,8 +27,9 @@ const CreatePage = () => {
   })
   useEffect(() => {
     if (!session) {
-      router.push("/")}
-    }, [router, session])
+      router.push("/")
+    }
+  }, [router, session])
   const handleSubmit = useCallback(
     async ({ name, description, categoryId }) => {
       // eslint-disable-next-line no-unused-vars

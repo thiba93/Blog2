@@ -28,8 +28,9 @@ const EditPage = () => {
 
   useEffect(() => {
     if (!session) {
-      router.push("/")}
-    }, [router, session])
+      router.push("/")
+    }
+  }, [router, session])
 
   useEffect(() => {
     if (productData) {
