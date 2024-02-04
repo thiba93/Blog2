@@ -52,7 +52,7 @@ const CreatePage = () => {
       }
     }
     fetchConnectedUser()
-  }, [])
+  }, [session.user.id]) 
 
   const { mutateAsync: saveProduct } = useMutation({
     mutationFn: (product) => createResource("products", product),
@@ -69,7 +69,7 @@ const CreatePage = () => {
 
       router.push(`/products/${productId}`)
     },
-    [saveProduct, router],
+    [saveProduct, router, session.user.id]
   )
 
   return (
