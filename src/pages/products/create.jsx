@@ -1,7 +1,5 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-shadow */
+
 /* eslint-disable max-lines-per-function */
-/* eslint-disable no-console */
 import { descriptionValidator, nameValidator } from "@/utils/validators"
 import Button from "@/web/components/ui/Button"
 import Form from "@/web/components/ui/Form"
@@ -27,7 +25,9 @@ const initialValues = {
 const CreatePage = () => {
   const { session } = useSession()
   const router = useRouter()
-  const [user, setUser] = useState(null)
+  const [ setUser] = useState(null)
+  const [setError] = useState("")
+
   useEffect(() => {
     const fetchConnectedUser = async () => {
       try {
@@ -36,19 +36,19 @@ const CreatePage = () => {
 
         if (data && data.result && data.result.length > 0) {
           const userWithMatchingId = data.result.find(
-            (user) => user.id === session.user.id,
+            (item) => item.id === session.user.id,
           )
 
           if (userWithMatchingId) {
             setUser(userWithMatchingId)
           } else {
-            console.error("User not found")
+            setError("User not found")
           }
         } else {
-          console.error("No user in the database")
+          setError("No user in the database")
         }
-      } catch (error) {
-        console.error("Error fetching user data", error)
+      } catch (err) {
+        setError("Error fetching user data" , err)
       }
     }
     fetchConnectedUser()

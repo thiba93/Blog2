@@ -18,8 +18,6 @@ const createLogger =
 
     const sanitizedData = merge([defaultData, data])
 
-    // eslint-disable-next-line no-console
-    console[scope](sanitizedData)
     await writeFile(logPath, `${JSON.stringify(sanitizedData)}\n`, {
       encoding: "utf-8",
       flag: "a+",

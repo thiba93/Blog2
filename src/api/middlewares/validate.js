@@ -4,7 +4,6 @@ import { ValidationError, object } from "yup"
 
 const validate =
   ({ query: queryValidator, body: bodyValidator }) =>
-  // eslint-disable-next-line complexity
   async (ctx) => {
     const { req, next } = ctx
 

@@ -1,5 +1,4 @@
-/* eslint-disable no-console */
-/* eslint-disable max-lines-per-function */
+
 import { useQuery } from "@tanstack/react-query"
 import axios from "axios"
 import { useRouter } from "next/router"

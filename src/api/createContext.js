@@ -16,7 +16,6 @@ export const createContext = ({ req, res, next, requestId }) => {
   const db = knex(config.db)
 
   if (config.isDevMode) {
-    // eslint-disable-next-line no-console
     db.on("query", ({ sql, bindings }) =>
       logInfo({ type: "SQL", requestId, sql, bindings }),
     )

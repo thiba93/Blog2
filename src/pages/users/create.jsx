@@ -1,5 +1,5 @@
 /* eslint-disable max-lines-per-function */
-import React, { useEffect } from "react"
+import React, { useEffect, useState} from "react"
 import { Formik, Form } from "formik"
 import * as Yup from "yup"
 import FormField from "@/web/components/ui/FormField"
@@ -12,6 +12,8 @@ import axios from "axios"
 const CreateUser = () => {
   const { session } = useSession()
   const router = useRouter()
+  const [ setError] = useState("")
+
 
   useEffect(() => {
     if (!session) {
@@ -43,7 +45,7 @@ const CreateUser = () => {
     try {
       await createResource("users", values)
     } catch (error) {
-      // Gérez les erreurs ici
+      setError("User creation failed")
     }
 
     setSubmitting(false)

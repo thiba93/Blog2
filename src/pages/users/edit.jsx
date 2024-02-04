@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable max-lines-per-function */
 import React, { useEffect, useState } from "react"
 import { Formik, Form } from "formik"
@@ -12,6 +11,8 @@ import { useSession } from "@/web/components/SessionContext"
 const EditUser = () => {
   const { session } = useSession()
   const router = useRouter()
+  const [ setError] = useState("")
+
 
   useEffect(() => {
     if (!session) {
@@ -35,7 +36,6 @@ const EditUser = () => {
   const [initialValues, setInitialValues] = useState({
     email: "",
     password: "",
-    // Ajoutez d'autres champs si nécessaire
   })
 
   useEffect(() => {
@@ -43,9 +43,7 @@ const EditUser = () => {
       const response = await axios.get(`/api/users/${userId}`)
       setInitialValues({
         email: response.data.result[0].email,
-        // Assurez-vous que le backend renvoie le mot de passe ou retirez cette ligne
         password: "",
-        // Mettez à jour avec d'autres données utilisateur si nécessaire
       })
     }
 
@@ -57,7 +55,6 @@ const EditUser = () => {
   const validationSchema = Yup.object({
     email: Yup.string().email("Invalid email address").required("Required"),
     password: Yup.string().required("Required"),
-    // Validez d'autres champs si nécessaire
   })
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
@@ -65,7 +62,7 @@ const EditUser = () => {
 
       router.push("/users/list")
     } catch (error) {
-      console.error("Failed to update user", error.message)
+      setError("User update failed")
     }
 
     setSubmitting(false)

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable max-lines-per-function */
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
@@ -20,7 +19,6 @@ const EditPage = () => {
   const [initialValues, setInitialValues] = useState({
     name: "",
     description: "",
-    // Ajoutez d'autres champs si nécessaire
   })
   const { data: productData, isLoading: isLoadingProduct } = useQuery({
     queryKey: ["product", productId],
@@ -52,7 +50,6 @@ const EditPage = () => {
       setInitialValues({
         name: productData.data.result[0].name,
         description: productData.data.result[0].description,
-        // Mettez à jour avec d'autres champs si nécessaire
       })
     }
   }, [productData])
@@ -60,7 +57,6 @@ const EditPage = () => {
   const validationSchema = object({
     name: nameValidator.required().label("Product name"),
     description: descriptionValidator.required().label("Product description"),
-    // Ajoutez des validations pour d'autres champs si nécessaire
   })
   const { mutateAsync: updateProduct } = useMutation({
     mutationFn: (product) => updateResource(`products/${productId}`, product),
